@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Yalla Şami</title>
-<meta name="description" content="Sıfırdan akıcılığa Şam (Levant) Arapçası: alfabe dahil 77 ders, rol yapma, aralıklı tekrar ve sözlük.">
+<meta name="description" content="Sıfırdan akıcılığa Şam (Levant) Arapçası: alfabe dahil 77 ders, 10 resimli hikâye, rol yapma, aralıklı tekrar ve sözlük.">
 <meta name="theme-color" content="#1c6a73">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -201,6 +201,26 @@ td .ar{font-size:1.3rem}
 .toggle{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
 textarea.inp{min-height:110px;font-size:.8rem;font-family:ui-monospace,Consolas,monospace}
 .word.ek{border-style:dashed}
+.btn svg{width:18px;height:18px;vertical-align:-3px;margin-inline-end:4px}
+.stories-h{margin-top:18px;font-size:1rem}
+.story-cards{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));margin-top:8px}
+.story-card{display:grid;grid-template-rows:auto 1fr;text-align:start;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;padding:0}
+.story-card .story-thumb{display:block;aspect-ratio:4/3;max-width:100%;background:#e8dfcf;overflow:hidden}
+.story-card .story-thumb img,.story-card .story-thumb svg{width:100%;height:100%;object-fit:cover;display:block}
+.story-card .t{padding:10px 12px;display:grid;gap:2px;min-width:0}
+.story-card .t small{color:var(--muted);line-height:1.35}
+.story-card .st{color:var(--tile)!important;font-weight:600}
+.story-card.locked{opacity:.55;cursor:not-allowed}
+.story-card.locked .story-thumb{filter:grayscale(1)}
+.story-card.done{border-color:var(--tile)}
+.scene{margin:0;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.scene svg{display:block;width:100%;height:auto;max-width:100%}
+.sline{grid-template-columns:1fr auto}
+.sline .ar{font-size:1.45rem}
+.tok{cursor:pointer;border-radius:4px;padding:0 1px}
+.tok:hover,.tok.on{background:var(--apricot-soft)}
+.gloss{margin-top:6px;background:var(--tile-soft);border-radius:8px;padding:6px 10px;font-size:.92rem}
+.gloss .ar{font-size:1.15rem}
 .rp-ask{background:var(--apricot-soft);border-radius:8px;padding:8px 12px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip-t{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:4px 12px;font-size:.85rem}
@@ -2619,6 +2639,588 @@ window.__EK_IDS = Object.keys(EK);
 })();
 
 </script>
+<script>
+// Resimli hikâyeler. Her seviyede iki hikâye; "after" dersi bitince açılır.
+// Sahne: {img, p (resim istemi), l: [[Arapça, okunuş, Türkçe], ...]}
+// Soru: [soru, [doğru, yanlış, yanlış, yanlış]] — uygulama seçenekleri karıştırır.
+window.STORIES = [
+{
+id:"h-a1-1", stage:"a1", after:"a1-8", t:"Emre Şam’da", s:"Çarşıda bir gezinti ve kafede bir buluşma",
+words:[["سوق","sû'","Çarşı"],["صاحْبة","ṣâḥbe","Kız arkadaş"],["هْدِيّة","hdiyye","Hediye"],["بَلا سُكَّر","bala sukkar","Şekersiz"],["مَبْسوط","mabsûṭ","Mutlu"],["بْشوفَك","bşûfak","Görüşürüz (seni görürüm)"],["تُرْكي","turki","Türk; Türkçe"],["المَسا","il-masa","Akşam"]],
+scenes:[
+{img:"h-a1-1-1", p:"Emre stands at the entrance of the covered Hamidiyeh souq in old Damascus, smiling and looking up in wonder at the tall arched metal roof pierced with small holes of sunlight; shoppers, fabric stalls and a juice seller behind him.",
+ l:[["هاد أمره. أمره تركي من إسطنبول.","hâd Emre. Emre turki min Isṭanbûl.","Bu Emre. Emre İstanbullu bir Türk."],["هلّق هوّي بالشام، بسوق الحميدية.","halla' huwwe bi ş-Şâm, b-sû' il-Ḥamîdiyye.","Şimdi Şam’da, Hamidiye Çarşısı’nda."],["السوق كبير وحلو كتير.","is-sû' kbîr w ḥilu ktîr.","Çarşı büyük ve çok güzel."]]},
+{img:"h-a1-1-2", p:"A cozy traditional Damascene café courtyard with a small fountain and jasmine; Rania waves happily at Emre as he arrives at her table.",
+ l:[["عند أمره صاحبة بالشام. إسما رانيا.","ʿind Emre ṣâḥbe bi ş-Şâm. isma Rânia.","Emre’nin Şam’da bir kız arkadaşı var. Adı Rania."],["رانيا: أهلا أمره! كيفك؟","Rânia: ahlan Emre! kîfak?","Rania: Merhaba Emre! Nasılsın?"],["أمره: منيح، الحمدلله! وإنتِ كيفك؟","Emre: mnîḥ, l-ḥamdilla! w inti kîfik?","Emre: İyiyim, çok şükür! Ya sen nasılsın?"]]},
+{img:"h-a1-1-3", p:"An older friendly waiter with a white apron takes the order from Emre and Rania at a small wooden café table; a brass tea pot and small cups on a tray.",
+ l:[["الجرسون: أهلا وسهلا! شو بدّكن؟","il-garsôn: ahlan w sahlan! şû biddkon?","Garson: Hoş geldiniz! Ne istersiniz?"],["رانيا: بدّي شاي لو سمحت.","Rânia: biddi şây law samaḥt.","Rania: Çay istiyorum lütfen."],["أمره: وأنا بدّي قهوة بلا سكّر.","Emre: w ana biddi 'ahwe bala sukkar.","Emre: Ben de şekersiz kahve istiyorum."]]},
+{img:"h-a1-1-4", p:"Emre hands Rania a small wrapped gift, a book with a red ribbon; Rania is surprised and delighted, holding her hand to her chest; tea and coffee cups on the table.",
+ l:[["مع أمره هديّة لرانيا: كتاب تركي.","maʿ Emre hdiyye la-Rânia: ktâb turki.","Emre’nin yanında Rania için bir hediye var: Türkçe bir kitap."],["رانيا: شكرًا كتير! الكتاب حلو.","Rânia: şukran ktîr! il-ktâb ḥilu.","Rania: Çok teşekkürler! Kitap güzel."],["أمره: أهلا! هاد كتاب لتتعلّمي تركي.","Emre: ahlan! hâd ktâb la-titʿallami turki.","Emre: Rica ederim! Bu Türkçe öğrenmen için bir kitap."]]},
+{img:"h-a1-1-5", p:"Emre and Rania laughing together in the café courtyard in warm afternoon light, Emre gesturing enthusiastically about the city; old Damascene stone walls in black and white stripes behind them.",
+ l:[["رانيا: إنت تعبان؟","Rânia: inta taʿbân?","Rania: Yorgun musun?"],["أمره: لأ، أنا مبسوط كتير. الشام حلوة!","Emre: la', ana mabsûṭ ktîr. iş-Şâm ḥilwe!","Emre: Hayır, çok mutluyum. Şam güzel!"],["رانيا: وإنت كمان تعلّمت عربي منيح!","Rânia: w inta kamân tʿallamt ʿarabi mnîḥ!","Rania: Sen de Arapçayı iyi öğrenmişsin!"]]},
+{img:"h-a1-1-6", p:"Evening in an old Damascus street with warm lanterns; Emre and Rania say goodbye at a corner, waving, a blue evening sky above the domes.",
+ l:[["الساعة سبعة المسا.","is-sâʿa sabʿa l-masa.","Saat akşam yedi."],["أمره: يلّا، بخاطرك.","Emre: yalla, bḫâṭrik.","Emre: Hadi, hoşça kal."],["رانيا: مع السلامة، بشوفك بكرا!","Rânia: maʿ s-salâme, bşûfak bukra!","Rania: Güle güle, yarın görüşürüz!"]]}
+],
+quiz:[["Emre nereli?",["İstanbul","Şam","Beyrut","Ankara"]],["Rania ne içmek istedi?",["Çay","Şekersiz kahve","Meyve suyu","Su"]],["Emre Rania’ya ne hediye etti?",["Türkçe bir kitap","Bir çiçek","Bir kalem","Bir çanta"]],["Saat kaçta ayrıldılar?",["Akşam yedide","Sabah sekizde","Öğle birde","Gece yarısı"]]]
+},
+{
+id:"h-a1-2", stage:"a1", after:"a1-15", t:"Rania’nın ailesi", s:"Cuma günü bir aile ziyareti",
+words:[["يا ابني","ya ibni","Oğlum (sevgi hitabı)"],["عُمْرو","ʿumro","Onun yaşı (erkek)"],["كِبّة","kibbe","İçli köfte"],["شَبْعان","şabʿân","Tok, doymuş"],["البيت بيتَك","il-bêt bêtak","Ev senin evin"],["سْخِن","suḫn","Sıcak"],["كِلّ","kill","Her"],["عَتيق","ʿatîʾ","Eski"]],
+scenes:[
+{img:"h-a1-2-1", p:"An old Damascene courtyard house with a central fountain, a lemon tree and black-and-white striped stone walls; Emre enters through a wooden door holding a box of sweets, Rania welcomes him.",
+ l:[["اليوم الجمعة. أمره عند عيلة رانيا.","il-yôm ij-jumʿa. Emre ʿind ʿêlet Rânia.","Bugün cuma. Emre, Rania’nın ailesinde."],["البيت عتيق وحلو.","il-bêt ʿatîʾ w ḥilu.","Ev eski ve güzel."],["بنص البيت في شجرة ليمون كبيرة.","b-nuṣṣ il-bêt fî şajret lêmûn kbîre.","Evin ortasında büyük bir limon ağacı var."]]},
+{img:"h-a1-2-2", p:"Abu Sami, a warm 58-year-old Syrian father with a grey mustache and beige cardigan, and Umm Sami, a smiling 52-year-old mother in a floral dress, greet Emre in the courtyard; Rania stands beside them.",
+ l:[["رانيا: هاد بيّي، أبو سامي. وهاي إمّي.","Rânia: hâd bayyi, abu Sâmi. w hây immi.","Rania: Bu babam, Ebu Sami. Bu da annem."],["أبو سامي: أهلا وسهلا يا ابني!","abu Sâmi: ahlan w sahlan ya ibni!","Ebu Sami: Hoş geldin oğlum!"],["أمره: أهلا فيك، تشرّفنا.","Emre: ahlan fîk, tşarrafna.","Emre: Hoş bulduk, memnun oldum."]]},
+{img:"h-a1-2-3", p:"Sami, a 26-year-old Syrian man with curly black hair, round glasses and a light-blue shirt, shakes Emre's hand while a 10-year-old girl with pigtails, Rania's little sister, peeks shyly from behind him.",
+ l:[["عند رانيا خيّ وأخت.","ʿind Rânia ḫayy w uḫt.","Rania’nın bir erkek bir de kız kardeşi var."],["خيّا سامي، عمرو ستّة وعشرين سنة.","ḫayya Sâmi, ʿumro sitte w ʿişrîn sene.","Erkek kardeşi Sami, yirmi altı yaşında."],["أختا زغيرة، عمرا عشر سنين.","uḫta zğîre, ʿumra ʿaşr snîn.","Kız kardeşi küçük, on yaşında."]]},
+{img:"h-a1-2-4", p:"Teta Suad, a kind 80-year-old grandmother in a white headscarf and long navy dress, sits on a cushioned bench and lovingly offers Emre a plate of food; Emre smiles politely.",
+ l:[["وهاي تيتة سعاد. عمرا تمانين سنة!","w hây têta Suʿâd. ʿumra tmânîn sene!","Bu da Suad nine. Seksen yaşında!"],["تيتة: تفضّل يا ابني، كول!","têta: tfaḍḍal ya ibni, kûl!","Nine: Buyur oğlum, ye!"],["أمره: شكرًا يا تيتة.","Emre: şukran ya têta.","Emre: Teşekkürler nine."]]},
+{img:"h-a1-2-5", p:"A long family dinner table in the courtyard full of Syrian dishes: hummus, tabbouleh, kibbeh, flatbread and olives; the whole family eats together and Emre compliments the grandmother.",
+ l:[["عالطاولة في أكل كتير: حمّص وتبّولة وكبّة وخبز سخن.","ʿa ṭ-ṭâwle fî akil ktîr: ḥummuṣ w tabbûle w kibbe w ḫubz suḫn.","Masada çok yemek var: humus, tabule, içli köfte ve sıcak ekmek."],["أمره: طيّب كتير!","Emre: ṭayyeb ktîr!","Emre: Çok lezzetli!"],["أمره: يسلمو إيديكي يا تيتة.","Emre: yislamu îdêki ya têta.","Emre: Ellerine sağlık nine."]]},
+{img:"h-a1-2-6", p:"Night at the courtyard door with warm lantern light; Abu Sami pats Emre on the shoulder as he leaves, the family waving goodbye behind.",
+ l:[["الساعة عشرة بالليل. أمره شبعان ومبسوط.","is-sâʿa ʿaşara bi l-lêl. Emre şabʿân w mabsûṭ.","Saat gece on. Emre tok ve mutlu."],["أبو سامي: البيت بيتك، تعا كل جمعة!","abu Sâmi: il-bêt bêtak, taʿa kill jumʿa!","Ebu Sami: Ev senin evin, her cuma gel!"],["أمره: إن شاء الله. مع السلامة!","Emre: inşalla. maʿ s-salâme!","Emre: İnşallah. Hoşça kalın!"]]}
+],
+quiz:[["Ziyaret hangi gün?",["Cuma","Pazar","Pazartesi","Cumartesi"]],["Sami kaç yaşında?",["Yirmi altı","On","Seksen","Otuz"]],["Evin ortasında ne var?",["Limon ağacı","Araba","Kuyu","Masa"]],["Ebu Sami, Emre’ye ne dedi?",["Ev senin evin, her cuma gel","Bir daha gelme","Yarın işe git","Kahve getir"]]]
+},
+{
+id:"h-a2-1", stage:"a2", after:"a2-8b", t:"Çarşıda pazarlık", s:"Anneye hediye, pazarlık ve kaybolmak",
+words:[["شال","şâl","Şal, atkı"],["حَرير","ḥarîr","İpek"],["فَرْجى","farja","Gösterdi"],["سَأَل","sa'al","Sordu"],["ضِعْت","ḍiʿt","Kayboldum"],["آخِر سِعِر","âḫer siʿr","Son fiyat"],["كِرْمالْكُن","karmâlkon","Hatırınız için"],["جامِع","jâmeʿ","Cami"]],
+scenes:[
+{img:"h-a2-1-1", p:"Emre and Sami (curly black hair, round glasses, light-blue shirt) walk side by side into the busy covered Hamidiyeh souq, chatting; colorful textiles hang on both sides.",
+ l:[["أمره بدّو يشتري هديّة لإمّو بإسطنبول.","Emre biddo yiştiri hdiyye la-immo b-Isṭanbûl.","Emre İstanbul’daki annesine hediye almak istiyor."],["راح مع سامي على سوق الحميدية.","râḥ maʿ Sâmi ʿala sû' il-Ḥamîdiyye.","Sami ile Hamidiye Çarşısı’na gitti."]]},
+{img:"h-a2-1-2", p:"A small textile shop full of colorful silk scarves; a cheerful middle-aged shopkeeper with a mustache welcomes Emre and Sami with open arms.",
+ l:[["البيّاع: أهلين! شو بتؤمروا؟","il-bayyâʿ: ahlên! şû bitʾmru?","Satıcı: Hoş geldiniz! Ne arzu edersiniz?"],["أمره: عم دوّر على شال حرير لإمّي.","Emre: ʿam dawwer ʿala şâl ḥarîr la-immi.","Emre: Annem için ipek bir şal arıyorum."]]},
+{img:"h-a2-1-3", p:"The shopkeeper holds up two silk scarves, one blue and one red, while Emre compares them thoughtfully and points at the blue one.",
+ l:[["البيّاع فرجى شال أزرق وشال أحمر.","il-bayyâʿ farja şâl azra' w şâl aḥmar.","Satıcı mavi bir şal ve kırmızı bir şal gösterdi."],["أمره: الأزرق عجبني أكتر. قدّيش حقّو؟","Emre: il-azra' ʿajabni aktar. 'addêş ḥa''o?","Emre: Mavisi daha çok hoşuma gitti. Fiyatı ne kadar?"],["البيّاع: خمسين ألف.","il-bayyâʿ: ḫamsîn alf.","Satıcı: Elli bin."]]},
+{img:"h-a2-1-4", p:"A playful bargaining scene: Sami raises his hands in mock shock at the price, the shopkeeper laughs, Emre holds the blue scarf; glasses of tea on the counter.",
+ l:[["سامي: غالي كتير يا عمّو! فيك تنزّل؟","Sâmi: ğâli ktîr ya ʿammo! fîk tnazzel?","Sami: Çok pahalı amca! İndirebilir misin?"],["البيّاع: كرمالكن، أربعين.","il-bayyâʿ: karmâlkon, arbʿîn.","Satıcı: Hatırınız için, kırk."],["أمره: تلاتين؟ — البيّاع: خمسة وتلاتين، وهاد آخر سعر!","Emre: tlâtîn? — il-bayyâʿ: ḫamse w tlâtîn, w hâd âḫer siʿr!","Emre: Otuz? — Satıcı: Otuz beş, bu son fiyat!"]]},
+{img:"h-a2-1-5", p:"Emre, holding a small shopping bag, looks around confused in a crowded narrow old-city alley; he asks an elderly man in a flat cap for directions, the man points ahead.",
+ l:[["بعد ما طلعوا من السوق، أمره ما عرف وين صار سامي.","baʿd ma ṭilʿu min is-sû', Emre mâ ʿiref wên ṣâr Sâmi.","Çarşıdan çıktıktan sonra Emre, Sami’nin nereye gittiğini bilemedi."],["سأل رجّال: عفوًا، وين الجامع الأموي؟","sa'al rijjâl: ʿafwan, wên ij-jâmeʿ il-umawi?","Bir adama sordu: Affedersiniz, Emevi Camii nerede?"],["الرجّال: روح دغري ولفّ يمين.","ir-rijjâl: rûḥ dûġri w liff yamîn.","Adam: Düz git ve sağa dön."]]},
+{img:"h-a2-1-6", p:"The grand courtyard of the Umayyad Mosque in Damascus with its shining marble floor and minaret; Sami waits in front and greets Emre with relief, both laughing, pigeons flying.",
+ l:[["سامي كان ناطر قدّام الجامع.","Sâmi kân nâṭer 'uddâm ij-jâmeʿ.","Sami caminin önünde bekliyordu."],["سامي: وينك يا زلمة؟!","Sâmi: wênak ya zalame?!","Sami: Neredesin be adam?!"],["أمره: ضعت شوي، بس عم بتعلّم!","Emre: ḍiʿt şwayy, bass ʿam bitʿallam!","Emre: Biraz kayboldum ama öğreniyorum!"]]}
+],
+quiz:[["Emre hediyeyi kime alıyor?",["Annesine","Rania’ya","Sami’ye","Babasına"]],["Emre hangi rengi beğendi?",["Mavi","Kırmızı","Yeşil","Sarı"]],["Son fiyat kaç oldu?",["Otuz beş bin","Elli bin","Kırk bin","Otuz bin"]],["Sami Emre’yi nerede bekledi?",["Emevi Camii’nin önünde","Kafede","Evde","Taksi durağında"]]]
+},
+{
+id:"h-a2-2", stage:"a2", after:"a2-15", t:"Yağmurlu bir gün", s:"Hasta bir arkadaş, eczane ve sıcak çorba",
+words:[["عَم تِشْتي","ʿam tişti","Yağmur yağıyor"],["صَيْدَلاني","ṣaydalâni","Eczacı"],["شوربة","şôrba","Çorba"],["مَرّات","marrât","Kere, defa"],["صاحِب حَقيقي","ṣâḥeb ḥaʾîʾi","Gerçek dost"],["بَعِد يومين","baʿd yômên","İki gün sonra"],["طِلْعِت الشَّمِس","ṭilʿet iş-şams","Güneş çıktı"],["رِشِح","rşiḥ","Nezle"]],
+scenes:[
+{img:"h-a2-2-1", p:"A rainy day in old Damascus: wet cobblestones reflecting warm windows, people with umbrellas hurrying through a narrow street, grey clouds above the rooftops.",
+ l:[["اليوم عم تشتي كتير بالشام.","il-yôm ʿam tişti ktîr bi ş-Şâm.","Bugün Şam’da çok yağmur yağıyor."],["الدنيا برد والناس ماشيين بسرعة.","id-dinye bard w in-nâs mâşyîn b-surʿa.","Hava soğuk ve insanlar hızlı yürüyor."]]},
+{img:"h-a2-2-2", p:"Split scene: Emre at his apartment window on the phone, rain outside; Sami lies in bed under a blanket with a thermometer in his mouth, looking miserable, holding his phone.",
+ l:[["أمره اتّصل بسامي: آلو سامي، كيفك؟","Emre ittaṣal b-Sâmi: âlô Sâmi, kîfak?","Emre Sami’yi aradı: Alo Sami, nasılsın?"],["سامي: مش منيح… بيوجعني راسي وعندي حرارة.","Sâmi: miş mnîḥ… bîwjaʿni râsi w ʿindi ḥarâra.","Sami: İyi değilim… başım ağrıyor ve ateşim var."]]},
+{img:"h-a2-2-3", p:"Inside a small neighborhood pharmacy with wooden shelves of medicine boxes; a friendly pharmacist in a white coat hands Emre, holding a dripping umbrella, a small paper bag.",
+ l:[["أمره أخد شمسية وراح عالصيدلية.","Emre aḫad şamsiyye w râḥ ʿa ṣ-ṣaydaliyye.","Emre şemsiye aldı ve eczaneye gitti."],["أمره: بدّي دوا للرشح والحرارة.","Emre: biddi dawa la-r-rşiḥ w il-ḥarâra.","Emre: Nezle ve ateş için ilaç istiyorum."],["الصيدلاني: خود هاد، تلات مرّات باليوم بعد الأكل.","iṣ-ṣaydalâni: ḫod hâd, tlat marrât bi l-yôm baʿd il-akil.","Eczacı: Bunu al, günde üç kez yemekten sonra."]]},
+{img:"h-a2-2-4", p:"Cozy bedroom: Emre sits beside Sami's bed and offers him a steaming bowl of lentil soup and the medicine; Sami smiles weakly, rain on the window.",
+ l:[["بعدين راح على بيت سامي وجابلو شوربة سخنة.","baʿdên râḥ ʿala bêt Sâmi w jâb-lo şôrba suḫne.","Sonra Sami’nin evine gitti ve ona sıcak çorba getirdi."],["سامي: يسلمو إيديك يا أمره.","Sâmi: yislamu îdêk ya Emre.","Sami: Ellerine sağlık Emre."],["سامي: إنت صاحب حقيقي.","Sâmi: inta ṣâḥeb ḥaʾîʾi.","Sami: Sen gerçek bir dostsun."]]},
+{img:"h-a2-2-5", p:"Two days later, a bright sunny morning: Sami, healthy again, opens his balcony doors and stretches happily; jasmine flowers and blue sky.",
+ l:[["بعد يومين، سامي صار منيح.","baʿd yômên, Sâmi ṣâr mnîḥ.","İki gün sonra Sami iyileşti."],["طلعت الشمس والدنيا صارت دافية.","ṭilʿet iş-şams w id-dinye ṣâret dâfye.","Güneş çıktı ve hava ılındı."]]},
+{img:"h-a2-2-6", p:"Emre and Sami sit at a sunny outdoor café table with small coffee cups, laughing; Sami proudly reaches for the bill.",
+ l:[["طلعوا سوا يشربوا قهوة.","ṭilʿu sawa yişrabu 'ahwe.","Kahve içmek için birlikte çıktılar."],["سامي: اليوم القهوة عليّي!","Sâmi: il-yôm il-'ahwe ʿalayyi!","Sami: Bugün kahveler benden!"]]}
+],
+quiz:[["Sami’nin nesi vardı?",["Başı ağrıyordu ve ateşi vardı","Ayağı kırıktı","Dişi ağrıyordu","Hiçbir şeyi yoktu"]],["Eczacı ilacı günde kaç kez önerdi?",["Üç kez","Bir kez","İki kez","Beş kez"]],["Emre Sami’ye ne getirdi?",["Sıcak çorba","Dondurma","Kahve","Pizza"]],["İki gün sonra hava nasıldı?",["Güneşli ve ılık","Karlı","Yağmurlu","Rüzgârlı"]]]
+},
+{
+id:"h-b1-1", stage:"b1", after:"b1-6", t:"Têta’nın köyü", s:"Ninenin çocukluk anıları",
+words:[["تَنّور","tannûr","Tandır"],["عين","ʿên","Pınar, kaynak (ve göz)"],["كَهْرَبا","kahraba","Elektrik"],["قَطْف","ʾaṭf","Toplama, hasat"],["تِلِمّ","tlimm","Toplanır, bir araya gelir"],["غَنّى","ġanna","Şarkı söyledi"],["قام","ʾâm","Kalktı"],["تْغَيَّرِت","tġayyaret","Değişti"]],
+scenes:[
+{img:"h-b1-1-1", p:"Evening in the family courtyard: Teta Suad, the 80-year-old grandmother in a white headscarf, sits on a cushioned bench telling a story; children sit on rugs around her listening, and Emre sits among them with a glass of tea.",
+ l:[["كل مسا جمعة، تيتة سعاد بتحكي قصّة لولاد العيلة.","kill masa jumʿa, têta Suʿâd btiḥki ʾiṣṣa la-wlâd il-ʿêle.","Her cuma akşamı Suad nine ailenin çocuklarına bir hikâye anlatır."],["اليوم أمره كمان قاعد معهن.","il-yôm Emre kamân ʾâʿed maʿhon.","Bugün Emre de onlarla oturuyor."]]},
+{img:"h-b1-1-2", p:"A nostalgic sepia-tinted memory scene: a small stone mountain village decades ago, a little girl (young Teta Suad, about 8, braids, simple dress) stands by a stone house lit only by an oil lamp at dusk.",
+ l:[["لمّا كنت زغيرة، كنّا نسكن بضيعة زغيرة بالجبل.","lamma kint zğîre, kinna nuskon b-ḍêʿa zğîre bi j-jabal.","Ben küçükken dağda küçük bir köyde otururduk."],["ما كان في كهربا ولا تلفزيون.","mâ kân fî kahraba wala talfizyôn.","Ne elektrik vardı ne televizyon."]]},
+{img:"h-b1-1-3", p:"Memory scene: early morning in the village, a mother bakes flatbread in a clay tannour oven while the little girl carries a clay water jug back from a stone spring.",
+ l:[["كل يوم كنّا نفيق بكّير.","kill yôm kinna nfîʾ bakkîr.","Her gün erken kalkardık."],["إمّي كانت تخبز خبز بالتنّور.","immi kânet tiḫbiz ḫubz bi t-tannûr.","Annem tandırda ekmek pişirirdi."],["وأنا كنت جيب المي من العين.","w ana kint jîb il-mayy min il-ʿên.","Ben de pınardan su getirirdim."]]},
+{img:"h-b1-1-4", p:"Memory scene: autumn olive harvest in a silver-green olive grove; villagers spread cloths under the trees, children shake branches, people sing and laugh together.",
+ l:[["بالخريف كانت كل الضيعة تلمّ لقطف الزيتون.","bi l-ḫarîf kânet kill iḍ-ḍêʿa tlimm la-ʾaṭf iz-zêtûn.","Sonbaharda bütün köy zeytin toplamaya bir araya gelirdi."],["كنّا نغنّي ونضحك طول النهار.","kinna nġanni w niḍḥak ṭûl in-nhâr.","Bütün gün şarkı söyler, gülerdik."]]},
+{img:"h-b1-1-5", p:"Memory scene, humorous: a small boy has fallen from an olive tree onto a soft pile of leaves, villagers rush over worried, but the boy sits up laughing.",
+ l:[["مرّة، خيّي الزغير وقع من الشجرة!","marra, ḫayyi z-zğîr wiʾiʿ min iş-şajara!","Bir keresinde küçük erkek kardeşim ağaçtan düştü!"],["كل الناس خافوا، بس هوّي قام وضحك.","kill in-nâs ḫâfu, bass huwwe ʾâm w ḍiḥik.","Herkes korktu ama o kalktı ve güldü."]]},
+{img:"h-b1-1-6", p:"Back in the present courtyard at night: Emre asks Teta Suad a question, she smiles with a faraway nostalgic look, the children leaning in; lantern light.",
+ l:[["أمره: يا تيتة، إذا فيكي، بترجعي عالضيعة؟","Emre: ya têta, iza fîki, btirjaʿi ʿa ḍ-ḍêʿa?","Emre: Nine, elinden gelse köye döner miydin?"],["تيتة: لو بقدر، كنت رجعت بكرا! بس الحياة تغيّرت.","têta: law bi'dar, kint rjiʿt bukra! bass il-ḥayâ tġayyaret.","Nine: Elimden gelse yarın dönerdim! Ama hayat değişti."],["أمره: قصّة حلوة كتير.","Emre: ʾiṣṣa ḥilwe ktîr.","Emre: Çok güzel bir hikâye."]]}
+],
+quiz:[["Nine küçükken nerede yaşardı?",["Dağda küçük bir köyde","Şam’ın merkezinde","Beyrut’ta","İstanbul’da"]],["Ninenin annesi ekmeği nerede pişirirdi?",["Tandırda","Fırında","Ocakta","Pişirmezdi"]],["Sonbaharda köy ne yapardı?",["Zeytin toplardı","Kar topu oynardı","Denize giderdi","Şehre taşınırdı"]],["Küçük kardeş ağaçtan düşünce ne yaptı?",["Kalktı ve güldü","Ağladı","Hastaneye gitti","Eve kaçtı"]]]
+},
+{
+id:"h-b1-2", stage:"b1", after:"b1-12", t:"Kayıp anahtar", s:"Gece yarısı kapıda kalmak ve iyi bir komşu",
+words:[["جَيْبة","jêbe","Cep"],["دَرَج","daraj","Merdiven"],["ضَيَّع","ḍayyaʿ","Kaybetti"],["لاقى","lâʾa","Buldu"],["ما تِحْمِل هَمّ","mâ tiḥmil hamm","Dert etme"],["صاحِب البيت","ṣâḥeb il-bêt","Ev sahibi"],["رَدّ","radd","(Telefona) cevap verdi"],["نُصّ اللّيل","nuṣṣ il-lêl","Gece yarısı"]],
+scenes:[
+{img:"h-b1-2-1", p:"Late at night in a dim apartment stairwell with an old wooden door; Emre searches his jacket pocket with a worried face, holding his backpack.",
+ l:[["أمره رجع عالبيت بعد نص الليل.","Emre rijiʿ ʿa l-bêt baʿd nuṣṣ il-lêl.","Emre gece yarısından sonra eve döndü."],["حطّ إيدو بجيبتو… والمفتاح ما كان فيها!","ḥaṭṭ îdo b-jêbto… w il-miftâḥ mâ kân fîha!","Elini cebine soktu… ve anahtar içinde değildi!"]]},
+{img:"h-b1-2-2", p:"Emre on his knees on the stairwell steps searching under the doormat with his phone flashlight, his backpack contents spilled out; frustrated expression.",
+ l:[["دوّر بالشنتة، تحت الباب، عالدرج… ولا شي.","dawwar bi ş-şanta, taḥt il-bâb, ʿa d-daraj… wala şî.","Çantada, kapının altında, merdivende aradı… hiçbir şey."],["قال لحالو: إذا ما لقيتو، رح نام بالشارع!","'âl la-ḥâlo: iza mâ l'êto, raḥ nâm bi ş-şâriʿ!","Kendi kendine dedi ki: Bulamazsam sokakta uyuyacağım!"]]},
+{img:"h-b1-2-3", p:"Split scene: Emre on the stairs calling on his phone; across the city Sami is fast asleep in bed, his phone buzzing silently on the nightstand.",
+ l:[["اتّصل بسامي، بس سامي كان نايم وما ردّ.","ittaṣal b-Sâmi, bass Sâmi kân nâyim w mâ radd.","Sami’yi aradı ama Sami uyuyordu ve açmadı."]]},
+{img:"h-b1-2-4", p:"A neighbor's door opens across the landing: Abu Khalil, a kind 65-year-old man in pajamas and a robe with a grey beard, peeks out holding a small lamp, looking concerned at Emre.",
+ l:[["فجأة فتح الجار أبو خليل بابو.","faj'a fataḥ ij-jâr abu Ḫalîl bâbo.","Birden komşu Ebu Halil kapısını açtı."],["أبو خليل: شو في يا ابني؟ ليش واقف برّا؟","abu Ḫalîl: şû fî ya ibni? lêş wâʾef barra?","Ebu Halil: Ne oldu oğlum? Neden dışarıda duruyorsun?"],["أمره: ضيّعت المفتاح!","Emre: ḍayyaʿt il-miftâḥ!","Emre: Anahtarı kaybettim!"]]},
+{img:"h-b1-2-5", p:"Abu Khalil smiles and holds up a spare brass key from a small hook board inside his doorway; Emre looks hugely relieved.",
+ l:[["أبو خليل: ما تحمل همّ!","abu Ḫalîl: mâ tiḥmil hamm!","Ebu Halil: Dert etme!"],["عندي مفتاح تاني اللي عطاني ياه صاحب البيت.","ʿindi miftâḥ tâni illi ʿaṭâni yâh ṣâḥeb il-bêt.","Bende ev sahibinin bana verdiği yedek bir anahtar var."]]},
+{img:"h-b1-2-6", p:"Emre opens his apartment door with the spare key, turns back to thank Abu Khalil warmly; both smile in the warm light from the open doorway.",
+ l:[["أمره فتح الباب وقال: لو ما كنت هون، ما بعرف شو كنت عملت!","Emre fataḥ il-bâb w 'âl: law mâ kint hôn, mâ baʿrif şû kint ʿmilt!","Emre kapıyı açtı ve dedi ki: Burada olmasaydın ne yapardım bilmiyorum!"],["أبو خليل: متل ما بيقولوا، الجار قبل الدار!","abu Ḫalîl: mitl ma byʾûlu, ij-jâr ʾabl id-dâr!","Ebu Halil: Dedikleri gibi, önce komşu sonra ev!"]]}
+],
+quiz:[["Emre eve ne zaman döndü?",["Gece yarısından sonra","Sabah erkenden","Öğlen","Akşam yedide"]],["Sami neden telefonu açmadı?",["Uyuyordu","Yolculuktaydı","Kızgındı","Telefonu kaybolmuştu"]],["Yedek anahtar kimdeydi?",["Komşu Ebu Halil’de","Rania’da","Sami’de","Polis’te"]],["Ebu Halil hangi atasözünü söyledi?",["Önce komşu sonra ev","Bir taşla iki kuş","Yalanın ipi kısadır","Bir gün bal bir gün soğan"]]]
+},
+{
+id:"h-b2-1", stage:"b2", after:"b2-5", t:"Dizi setinde", s:"Sami eski Şam’da bir dizide oynuyor",
+words:[["دور","dôr","Rol (ve sıra)"],["بْيِنْصَوَّر","byinṣawwar","Çekiliyor (film)"],["مُخْرِج","muḫrij","Yönetmen"],["مَشْهَد","maşhad","Sahne"],["قُمْباز","ʾumbâz","Geleneksel uzun entari"],["طَرْبوش","ṭarbûş","Fes"],["نِجِم","nijm","Yıldız (ünlü)"],["صَفَّقوا","ṣaffaʾu","Alkışladılar"]],
+scenes:[
+{img:"h-b2-1-1", p:"A film set in an old Damascus alley with wooden balconies: lights, a camera on a dolly, crew members; Sami, in a traditional striped long robe and red fez, reads his script nervously.",
+ l:[["سامي أخد دور زغير بمسلسل عم ينصوّر بالشام القديمة.","Sâmi aḫad dôr zğîr b-musalsal ʿam yinṣawwar bi ş-Şâm il-ʾadîme.","Sami eski Şam’da çekilen bir dizide küçük bir rol aldı."],["أمره وصل لحتّى يشوفو.","Emre wiṣil la-ḥatta yşûfo.","Emre onu görmek için geldi."]]},
+{img:"h-b2-1-2", p:"An intense film director with a beard and a cap shouts through a megaphone on set while actors freeze mid-scene; Sami looks embarrassed.",
+ l:[["المخرج: على مهلكن! المشهد لازم ينعاد مرّة تانية.","il-muḫrij: ʿala mahelkon! il-maşhad lâzem yinʿâd marra tânye.","Yönetmen: Yavaş olun! Sahne bir kez daha tekrarlanmalı."],["سامي نسي جملتو للمرّة التالتة.","Sâmi nisi jumilto la-l-marra t-tâlte.","Sami repliğini üçüncü kez unuttu."]]},
+{img:"h-b2-1-3", p:"Close shot of Sami in costume: traditional Damascene striped qumbaz robe and red tarboush fez, practicing his line in front of a mirror held by a makeup artist.",
+ l:[["سامي كان لابس قمباز عتيق وطربوش أحمر، متل أيّام زمان.","Sâmi kân lâbes ʾumbâz ʿatîʾ w ṭarbûş aḥmar, mitl ayyâm zamân.","Sami eski günlerdeki gibi eski bir entari ve kırmızı fes giymişti."],["كان عم يعيد جملتو قدّام المراية.","kân ʿam yʿîd jumilto 'uddâm il-mrâye.","Aynanın önünde repliğini tekrarlıyordu."]]},
+{img:"h-b2-1-4", p:"Emre teases Sami behind the camera, grinning and making a 'star' gesture; Sami, in costume, rolls his eyes and laughs.",
+ l:[["أمره: يا حلاوة! صرت نجم!","Emre: ya ḥalâwe! ṣirt nijm!","Emre: Ne tatlı! Yıldız oldun!"],["سامي: لك طوّل بالك! عندي جملة وحدة بس.","Sâmi: lak ṭawwel bâlak! ʿindi jumle waḥde bass.","Sami: Yavaş ol be! Sadece tek bir repliğim var."]]},
+{img:"h-b2-1-5", p:"The scene is finally filmed: Sami delivers his line confidently in the alley; the crew and extras clap and cheer, the director gives a thumbs up.",
+ l:[["بعد عشر مرّات، المشهد انصوّر منيح.","baʿd ʿaşr marrât, il-maşhad nṣawwar mnîḥ.","On denemeden sonra sahne iyi çekildi."],["الكلّ صفّقوا، وحتّى المخرج ضحك.","il-kill ṣaffaʾu, w ḥatta l-muḫrij ḍiḥik.","Herkes alkışladı, yönetmen bile güldü."]]},
+{img:"h-b2-1-6", p:"Evening, Sami (now in his normal light-blue shirt and glasses) and Emre walk away from the set eating ka'ak, chatting happily under string lights.",
+ l:[["سامي: المسلسل رح ينعرض برمضان.","Sâmi: il-musalsal raḥ yinʿaraḍ b-ramaḍân.","Sami: Dizi Ramazan’da yayınlanacak."],["أمره: رح احضرو كل يوم، على عيني!","Emre: raḥ iḥḍaro kill yôm, ʿala ʿêni!","Emre: Her gün izleyeceğim, gözüm üstüne!"]]}
+],
+quiz:[["Dizi nerede çekiliyordu?",["Eski Şam’da","Beyrut’ta","İstanbul’da","Bir köyde"]],["Sami ne giymişti?",["Eski bir entari ve kırmızı fes","Takım elbise","Spor kıyafeti","Doktor önlüğü"]],["Sahne kaçıncı denemede iyi çekildi?",["Onuncu","Birinci","Üçüncü","Beşinci"]],["Dizi ne zaman yayınlanacak?",["Ramazan’da","Yazın","Yılbaşında","Yarın"]]]
+},
+{
+id:"h-b2-2", stage:"b2", after:"b2-10", t:"Beyrut yolu", s:"Sınır, deniz ve ağız farkları",
+words:[["حُدود","ḥudûd","Sınır"],["جَوازات","jawâzât","Pasaportlar"],["اِسْتَقْبَل","staʾbal","Karşıladı"],["بَحِر","baḥr","Deniz"],["كورْنيش","kôrnîş","Sahil yolu"],["غُروب","ġurûb","Gün batımı"],["طَعْمة","ṭaʿme","Tat, lezzet"],["مَنْقوشة","manʾûşe","Zahterli pide"]],
+scenes:[
+{img:"h-b2-2-1", p:"A yellow taxi drives on a winding mountain road through the green Lebanon mountains with cedar trees; Emre and Sami look out the window at the view.",
+ l:[["أمره وسامي ركبوا تاكسي من الشام لبيروت.","Emre w Sâmi rikbu tâksi min iş-Şâm la-Bêrût.","Emre ile Sami Şam’dan Beyrut’a taksiye bindi."],["الطريق بيمرق بجبال لبنان، وفيها شجر أرز.","iṭ-ṭarîʾ byimroʾ b-jbâl Lubnân, w fîha şajar arz.","Yol Lübnan dağlarından geçiyor; orada sedir ağaçları var."]]},
+{img:"h-b2-2-2", p:"A border checkpoint building with a small queue; a uniformed official at a window checks passports while Emre and Sami wait patiently.",
+ l:[["عالحدود، الموظّف قال: جوازاتكن لو سمحتوا.","ʿa l-ḥudûd, il-mwaẓẓaf 'âl: jawâzâtkon law samaḥtu.","Sınırda memur dedi ki: Pasaportlarınız lütfen."],["استنّوا نص ساعة، وبعدين كمّلوا.","stannu nuṣṣ sâʿa, w baʿdên kammalu.","Yarım saat beklediler, sonra devam ettiler."]]},
+{img:"h-b2-2-3", p:"A lively Beirut street with modern and old buildings; Rami, a stylish 27-year-old Lebanese man with a neat haircut, sunglasses on his head and a denim jacket, greets Sami with a hug and shakes Emre's hand.",
+ l:[["ببيروت، استقبلهن رامي، صاحب سامي.","b-Bêrût, staʾbalhon Râmi, ṣâḥeb Sâmi.","Beyrut’ta onları Sami’nin arkadaşı Rami karşıladı."],["رامي: هاي! كيفكن؟ ça va؟","Râmi: hây! kîfkon? ça va?","Rami: Selam! Nasılsınız? İyi misiniz?"]]},
+{img:"h-b2-2-4", p:"The three friends stand at a seaside railing on the Beirut corniche, the Mediterranean sea sparkling; Rami proudly points at the sea, Emre laughs.",
+ l:[["رامي: هيدا البحر! عجبكن؟","Râmi: hayda l-baḥr! ʿajabkon?","Rami: İşte deniz! Beğendiniz mi?"],["أمره ضحك: هيدا؟ بالشام منقول هاد!","Emre ḍiḥik: hayda? bi ş-Şâm mnʾûl hâd!","Emre güldü: «Hayda» mı? Şam’da «hâd» deriz!"]]},
+{img:"h-b2-2-5", p:"Sunset on the Beirut corniche: the three friends sit on a low wall eating folded manakish flatbreads, the sky orange and pink over the sea, the Pigeon Rocks in the distance.",
+ l:[["أكلوا منقوشة عالكورنيش، وشافوا الغروب.","akalu manʾûşe ʿa l-kôrnîş, w şâfu l-ġurûb.","Sahil yolunda zahterli pide yediler ve gün batımını izlediler."]]},
+{img:"h-b2-2-6", p:"Night, the friends walk along the lit corniche talking animatedly, Emre in the middle gesturing as if explaining something, city lights reflecting on the sea.",
+ l:[["أمره: كل لهجة إلها طعمة.","Emre: kill lahje ilha ṭaʿme.","Emre: Her ağzın kendi tadı var."],["بس بالآخر، كلّنا منفهم بعض.","bass bi l-âḫer, killna mnifham baʿḍ.","Ama sonunda hepimiz birbirimizi anlıyoruz."]]}
+],
+quiz:[["Beyrut’a nasıl gittiler?",["Taksiyle","Uçakla","Trenle","Yürüyerek"]],["Sınırda ne kadar beklediler?",["Yarım saat","Beş saat","Hiç beklemediler","Bütün gün"]],["Rami «bu» için hangi kelimeyi kullandı?",["Hayda","Hâd","Hâza","Hey"]],["Sahil yolunda ne yediler?",["Zahterli pide","Kebap","Balık","Dondurma"]]]
+},
+{
+id:"h-c1-1", stage:"c1", after:"c1-4", t:"Sami’nin düğünü", s:"Dabke, zılgıt ve dualar",
+words:[["عِرِس","ʿirs","Düğün"],["فِرْقة","firʾa","Müzik grubu"],["دَبْكة","dabke","Halay benzeri halk dansı"],["زَغْرَدِت","zaġradet","Zılgıt çekti"],["عِريس","ʿarîs","Damat"],["عَروس","ʿarûs","Gelin"],["حَسّيت","ḥassêt","Hissettim"],["لَيْلة","lêle","Gece (bir gece)"]],
+scenes:[
+{img:"h-c1-1-1", p:"A bustling family home a week before a wedding: women prepare trays of sweets, men hang string lights in the courtyard, Rania carries flowers; joyful busy atmosphere.",
+ l:[["إجا يوم عرس سامي.","ija yôm ʿirs Sâmi.","Sami’nin düğün günü geldi."],["العيلة كلّها كانت عم تحضّر من قبل أسبوع.","il-ʿêle killa kânet ʿam tḥaḍḍer min ʾabl usbûʿ.","Bütün aile bir hafta öncesinden hazırlanıyordu."]]},
+{img:"h-c1-1-2", p:"A festive wedding night in a lantern-lit courtyard: a band with a tabla drum and a mijwiz flute plays, a line of young men and women dance the dabke holding hands, Emre joins in clumsily but happily.",
+ l:[["بالمسا، عزفت الفرقة ورقص الشباب الدبكة.","bi l-masa, ʿazafet il-firʾa w raʾaṣ iş-şabâb id-dabke.","Akşam grup çaldı ve gençler dabke oynadı."],["أمره كمان فات بالدبكة، وكل الناس ضحكوا ومبسوطين.","Emre kamân fât bi d-dabke, w kill in-nâs ḍiḥku w mabsûṭîn.","Emre de dabkeye katıldı; herkes güldü, herkes mutluydu."]]},
+{img:"h-c1-1-3", p:"Sami as the groom in an elegant dark suit with a white flower on his lapel, beside his bride in a white wedding dress; Emre hugs Sami warmly and congratulates him.",
+ l:[["أمره: مبروك يا خيّو! بالهنا والبنين!","Emre: mabrûk ya ḫayyo! bi l-hana w il-banîn!","Emre: Tebrikler kardeşim! Mutluluklar!"],["سامي: الله يبارك فيك… وعقبالك!","Sâmi: allâh ybârek fîk… w ʿuʾbâlak!","Sami: Sağ ol… Sıra sende!"]]},
+{img:"h-c1-1-4", p:"Teta Suad, the grandmother in her white headscarf, ululates joyfully with her hand near her mouth, surrounded by clapping women; confetti and rose petals in the air.",
+ l:[["تيتة سعاد زغردت وقالت:","têta Suʿâd zaġradet w 'âlet:","Suad nine zılgıt çekti ve dedi ki:"],["إن شاء الله حياتكن كلّها عسل، وما فيها بصل!","inşalla ḥayâtkon killa ʿasal, w mâ fîha baṣal!","İnşallah hayatınız hep bal olur, içinde hiç soğan olmaz!"]]},
+{img:"h-c1-1-5", p:"Abu Sami, the father with a grey mustache, stands and raises his glass of juice giving a short emotional speech, his eyes a little teary; guests listen at long tables.",
+ l:[["أبو سامي وقف وحكى:","abu Sâmi wiʾif w ḥaka:","Ebu Sami ayağa kalktı ve konuştu:"],["اليوم ابني صار عندو بيت وعيلة. الحمدلله على كل شي.","il-yôm ibni ṣâr ʿindo bêt w ʿêle. l-ḥamdilla ʿala kill şî.","Bugün oğlumun bir evi ve ailesi oldu. Her şey için çok şükür."]]},
+{img:"h-c1-1-6", p:"Late night, the courtyard emptying, string lights glowing; Emre sits on the steps with Rania, both tired and smiling, looking at the stars over the rooftops.",
+ l:[["بآخر الليل، أمره قال لرانيا:","b-âḫer il-lêl, Emre 'âl la-Rânia:","Gecenin sonunda Emre Rania’ya dedi ki:"],["عمري ما بنسى هالليلة. حسّيت حالي واحد من العيلة.","ʿumri mâ bansa ha-l-lêle. ḥassêt ḥâli wâḥad min il-ʿêle.","Bu geceyi ömrüm boyunca unutmam. Kendimi ailenin bir parçası gibi hissettim."]]}
+],
+quiz:[["Aile ne zamandan beri hazırlanıyordu?",["Bir hafta öncesinden","Bir yıl öncesinden","Aynı sabahtan","Bir ay öncesinden"]],["Sami, Emre’nin tebriğine ne cevap verdi?",["Sağ ol, sıra sende","Başın sağ olsun","Geçmiş olsun","Hoşça kal"]],["Nine hangi atasözüyle oynadı?",["Bir gün bal bir gün soğan","Önce komşu sonra ev","Dilin atındır","Yalanın ipi kısadır"]],["Emre o gece kendini nasıl hissetti?",["Ailenin bir parçası gibi","Yabancı gibi","Çok yorgun ve kızgın","Sıkılmış"]]]
+},
+{
+id:"h-c1-2", stage:"c1", after:"c1-8", t:"Kasyûn’dan bakış", s:"Yolculuğun sonunda Şam’a yukarıdan bakmak",
+words:[["عَم تِضْوي","ʿam tiḍwi","Parlıyor, ışıl ışıl"],["غَيْر","ġêr","…den başka"],["حْلِمْت","ḥlimt","Rüya gördüm"],["التِّكْرار","it-tikrâr","Tekrar"],["ساكْتين","sâktîn","Sessiz (çoğul)"],["يِتْفَرَّجوا","yitfarraju","Seyrediyorlar"],["بَيْتي التّاني","bêti t-tâni","İkinci evim"],["طَريقَك خَضْرا","ṭarîʾak ḫaḍra","Yolun açık olsun"]],
+scenes:[
+{img:"h-c1-2-1", p:"Night on Mount Qasioun overlooking Damascus: the whole city glitters with thousands of lights below; Emre, Rania and Sami sit on a low stone wall with small tea glasses, seen from behind.",
+ l:[["أمره طلع على جبل قاسيون مع رانيا وسامي.","Emre ṭiliʿ ʿala jabal Ḳâsyûn maʿ Rânia w Sâmi.","Emre, Rania ve Sami ile Kasyûn dağına çıktı."],["قدّامهن الشام كلّها عم تضوي.","ʾiddâmhon iş-Şâm killa ʿam tiḍwi.","Önlerinde bütün Şam ışıl ışıl parlıyor."]]},
+{img:"h-c1-2-2", p:"Close view of Rania smiling teasingly at Emre, her mustard cardigan wrapped around her against the night breeze, city lights blurred behind her.",
+ l:[["رانيا: بتتذكّر أوّل يوم جيت فيه؟","Rânia: btitzakkar awwal yôm jît fî?","Rania: Geldiğin ilk günü hatırlıyor musun?"],["ما كنت تعرف غير «مرحبا»!","mâ kint taʿrif ġêr «marḥaba»!","«Merhaba»dan başka bir şey bilmiyordun!"]]},
+{img:"h-c1-2-3", p:"Emre laughs and covers his face with one hand in mock embarrassment, while a dreamy thought bubble above him shows Arabic calligraphy letters floating like stars.",
+ l:[["أمره: إي والله… كنت خايف إحكي.","Emre: ê walla… kint ḫâyef iḥki.","Emre: Evet vallahi… konuşmaktan korkuyordum."],["هلّق صرت إحلم بالعربي!","halla' ṣirt iḥlam bi l-ʿarabi!","Şimdi Arapça rüya görmeye başladım!"]]},
+{img:"h-c1-2-4", p:"Sami, with his round glasses reflecting the city lights, asks a thoughtful question; Emre answers counting on his fingers, notebooks of Arabic letters imagined around him.",
+ l:[["سامي: شو أصعب شي كان عليك؟","Sâmi: şû aṣʿab şî kân ʿalêk?","Sami: Senin için en zor şey ne oldu?"],["أمره: بالأوّل العين والحا، وبعدين القراية.","Emre: bi l-awwal il-ʿên w il-ḥâ, w baʿdên il-ʾirâye.","Emre: Önce ayn ve ha sesleri, sonra okuma."],["بس التكرار علّمني كل شي.","bass it-tikrâr ʿallamni kill şî.","Ama tekrar bana her şeyi öğretti."]]},
+{img:"h-c1-2-5", p:"Rania and Emre talk seriously and warmly, facing each other on the wall; in the background the sky begins to lighten slightly at the edge of the horizon.",
+ l:[["رانيا: وشو خطّتك هلّق؟","Rânia: w şû ḫuṭṭtak halla'?","Rania: Peki şimdi planın ne?"],["أمره: بدّي ضلّ إتعلّم، وعلّم عربي للأتراك.","Emre: biddi ḍall itʿallam, w ʿallem ʿarabi la-l-atrâk.","Emre: Öğrenmeye devam etmek ve Türklere Arapça öğretmek istiyorum."]]},
+{img:"h-c1-2-6", p:"Dawn breaking over Damascus seen from Mount Qasioun, golden light spreading over domes and minarets; the three friends stand silhouetted, quietly watching; peaceful, hopeful mood.",
+ l:[["كانوا ساكتين شوي، يتفرّجوا عالضو.","kânu sâktîn şwayy, yitfarraju ʿa ḍ-ḍaww.","Bir süre sessizce ışıkları seyrettiler."],["أمره: الشام صارت بيتي التاني.","Emre: iş-Şâm ṣâret bêti t-tâni.","Emre: Şam ikinci evim oldu."],["سامي: وطريقك خضرا يا صاحبي!","Sâmi: w ṭarîʾak ḫaḍra ya ṣâḥbi!","Sami: Yolun açık olsun dostum!"]]}
+],
+quiz:[["Arkadaşlar nereye çıktı?",["Kasyûn dağına","Kalenin kulesine","Bir gökdelene","Köydeki tepeye"]],["Emre ilk geldiğinde ne biliyordu?",["Sadece «merhaba»","Her şeyi","Hiçbir şey","Sadece sayıları"]],["Emre’ye göre ona her şeyi ne öğretti?",["Tekrar","Televizyon","Şans","Kitaplar"]],["Emre’nin planı ne?",["Öğrenmeye devam edip Türklere Arapça öğretmek","Türkiye’ye dönüp Arapçayı bırakmak","Lokanta açmak","Dizide oynamak"]]]
+}
+];
+
+</script>
+<script>
+// Hikâye sahnelerinin vektör çizim tarifleri (src/scenes.js çizer).
+// c: [karakter, x, poz, {flip, s, y}]   p: [eşya, x, y]   back: karakterlerin arkasındaki eşyalar
+window.SCENES = {
+// --- A1-1 Emre Şam'da
+"h-a1-1-1":{bg:"souq", c:[["emre",150,"cheer"],["womanA",290,"stand",{s:.8,flip:true}],["manB",350,"stand",{s:.75,flip:true}]], p:[]},
+"h-a1-1-2":{bg:"cafe", c:[["emre",110,"wave"],["rania",270,"wave",{sit:true,flip:true}]], p:[["table",280,216,{w:120}],["tea",300,214]]},
+"h-a1-1-3":{bg:"cafe", c:[["emre",130,"sit"],["rania",250,"sit",{flip:true}],["waiter",340,"hold",{flip:true}]], p:[["table",190,216,{w:150}],["tray",336,180]]},
+"h-a1-1-4":{bg:"cafe", c:[["emre",140,"give"],["rania",260,"laugh",{flip:true}]], p:[["table",200,222,{w:120}],["gift",196,178],["tea",160,220],["coffee",240,220]]},
+"h-a1-1-5":{bg:"cafe", t:"evening", c:[["emre",130,"cheer"],["rania",270,"laugh",{flip:true}]], p:[["table",200,222,{w:120}],["tea",180,220],["coffee",220,220]]},
+"h-a1-1-6":{bg:"street", t:"evening", c:[["emre",130,"wave"],["rania",270,"wave",{flip:true}]], fx:["stars"]},
+// --- A1-2 Rania'nın ailesi
+"h-a1-2-1":{bg:"house", c:[["emre",230,"hold"],["rania",320,"wave",{flip:true}]], p:[["sweets",230,190]]},
+"h-a1-2-2":{bg:"house", c:[["abusami",150,"give"],["ummsami",230,"stand"],["rania",300,"stand",{flip:true}],["emre",370,"stand",{flip:true}]]},
+"h-a1-2-3":{bg:"house", c:[["emre",130,"give"],["sami",210,"give",{flip:true}],["girl",280,"stand",{flip:true,s:.7}]]},
+"h-a1-2-4":{bg:"house", t:"evening", back:[["bench",170,268]], c:[["teta",150,"give",{sit:true,y:236}],["emre",290,"laugh",{flip:true}]], p:[["dishes",235,190,{}]]},
+"h-a1-2-5":{bg:"dining", t:"evening", c:[["abusami",70,"sit"],["teta",150,"sit"],["emre",230,"laugh",{sit:true}],["rania",310,"sit",{flip:true}],["sami",380,"sit",{flip:true}]], p:[["longtable",220,214],["dishes",210,214]]},
+"h-a1-2-6":{bg:"house", t:"night", back:[["opendoor",290,268]], c:[["abusami",220,"give"],["emre",320,"wave",{flip:true}],["rania",120,"wave"]], fx:["stars"]},
+// --- A2-1 Çarşıda pazarlık
+"h-a2-1-1":{bg:"souq", c:[["emre",160,"point"],["sami",250,"laugh",{flip:true}],["womanA",60,"stand",{s:.8}],["manB",350,"stand",{s:.8,flip:true}]]},
+"h-a2-1-2":{bg:"shop", c:[["seller",200,"cheer"],["emre",90,"stand"],["sami",320,"stand",{flip:true}]]},
+"h-a2-1-3":{bg:"shop", c:[["seller",200,"hold"],["emre",90,"point"],["sami",320,"think",{flip:true}]], p:[["scarfBlue",176,190],["scarfRed",226,190]]},
+"h-a2-1-4":{bg:"shop", c:[["sami",90,"cheer"],["seller",210,"laugh"],["emre",320,"hold",{flip:true}]], p:[["scarfBlue",320,192],["tea",170,204],["tea",250,204]]},
+"h-a2-1-5":{bg:"street", c:[["emre",150,"think"],["oldman",270,"point",{flip:true}]], p:[["bag",120,210],["question",170,90]]},
+"h-a2-1-6":{bg:"mosque", c:[["sami",150,"cheer"],["emre",260,"laugh",{flip:true}]], p:[["bag",290,212]]},
+// --- A2-2 Yağmurlu bir gün
+"h-a2-2-1":{bg:"street", t:"rain", c:[["womanB",110,"umbrella"],["manA",290,"umbrella",{flip:true}]], p:[["umbrella",130,140],["umbrella",270,140]], fx:["rain"]},
+"h-a2-2-2":{bg:"room", t:"rain", back:[["bed",230,268]], c:[["emre",90,"phone"]], p:[["sleeper",230,268,{who:"sami"}],["thermo",176,206],["phone",106,130]]},
+"h-a2-2-3":{bg:"pharmacy", c:[["pharma",230,"give",{flip:true}],["emre",120,"hold"]], p:[["counter",230,210],["medicine",190,206],["umbrella",80,150]]},
+"h-a2-2-4":{bg:"room", t:"rain", back:[["bed",250,268]], c:[["emre",110,"give"]], p:[["sleeper",250,268,{who:"sami"}],["soup",160,178]]},
+"h-a2-2-5":{bg:"room", t:"day", c:[["sami",200,"cheer"]], fx:["sun"]},
+"h-a2-2-6":{bg:"cafe", t:"day", c:[["emre",120,"laugh",{sit:true}],["sami",280,"point",{sit:true,flip:true}]], p:[["table",200,216,{w:140}],["coffee",180,214],["coffee",220,214]], fx:["sun"]},
+// --- B1-1 Têta'nın köyü
+"h-b1-1-1":{bg:"house", t:"evening", back:[["bench",90,268]], c:[["teta",80,"give",{sit:true,y:236}],["boy",180,"stand",{s:.65}],["girl",230,"stand",{s:.65}],["emre",310,"laugh",{flip:true}]], p:[["rug",210,268],["glass",290,212]]},
+"h-b1-1-2":{bg:"village", memory:true, c:[["girl",200,"stand",{s:.75}]], p:[["lamp",250,220]]},
+"h-b1-1-3":{bg:"spring", memory:true, c:[["womanA",70,"hold"],["girl",210,"hold",{s:.75}]], p:[["jug",210,208]]},
+"h-b1-1-4":{bg:"olives", memory:true, c:[["manA",80,"cheer",{s:.85}],["womanA",160,"dance",{s:.85}],["girl",240,"cheer",{s:.65}],["manB",320,"laugh",{s:.85,flip:true}]]},
+"h-b1-1-5":{bg:"olives", memory:true, c:[["boy",200,"laugh",{s:.6,sit:true,y:262}],["womanA",100,"cover",{s:.85}],["manA",300,"point",{s:.85,flip:true}]], p:[["pile",200,264]]},
+"h-b1-1-6":{bg:"house", t:"night", back:[["bench",120,268]], c:[["teta",110,"think",{sit:true,y:236}],["emre",290,"point",{flip:true}],["girl",220,"stand",{s:.6}]], fx:["stars"]},
+// --- B1-2 Kayıp anahtar
+"h-b1-2-1":{bg:"stairs", c:[["emre",200,"search"]], p:[["question",230,80]]},
+"h-b1-2-2":{bg:"stairs", c:[["emre",200,"search",{s:.9,y:272}]], p:[["bag",150,262],["phone",250,250],["book",120,264]]},
+"h-b1-2-3":{bg:"stairs", back:[["bed",320,268]], c:[["emre",130,"phone"]], p:[["sleeper",320,268,{who:"sami"}],["zzz",300,180],["phone",146,130]]},
+"h-b1-2-4":{bg:"stairs", back:[["opendoor",310,268]], c:[["emre",130,"sad"],["khalil",300,"hold",{flip:true}]], p:[["lamp",280,186]]},
+"h-b1-2-5":{bg:"stairs", back:[["opendoor",310,268]], c:[["emre",130,"cheer"],["khalil",290,"key",{flip:true}]], p:[["key",236,150]]},
+"h-b1-2-6":{bg:"stairs", back:[["opendoor",110,268]], c:[["emre",170,"laugh",{flip:true}],["khalil",290,"laugh",{flip:true}]], p:[["heart",230,90]]},
+// --- B2-1 Dizi setinde
+"h-b2-1-1":{bg:"set", c:[["samiFez",230,"read"],["emre",330,"stand",{flip:true}]], p:[["camera",100,268],["script",230,184]]},
+"h-b2-1-2":{bg:"set", c:[["director",110,"shout"],["samiFez",270,"sad",{flip:true}]], p:[["megaphone",140,124],["camera",360,268]]},
+"h-b2-1-3":{bg:"set", c:[["samiFez",160,"read"],["makeup",280,"hold",{flip:true}]], p:[["mirror",250,180],["script",160,184]]},
+"h-b2-1-4":{bg:"set", c:[["emre",130,"cheer"],["samiFez",270,"laugh",{flip:true}]]},
+"h-b2-1-5":{bg:"set", c:[["samiFez",200,"cheer"],["director",90,"laugh"],["manA",320,"cheer",{flip:true}]], fx:["confetti"]},
+"h-b2-1-6":{bg:"street", t:"evening", c:[["sami",160,"point"],["emre",260,"laugh",{flip:true}]], fx:["stars"]},
+// --- B2-2 Beyrut yolu
+"h-b2-2-1":{bg:"mountainroad", p:[["taxi",200,276]]},
+"h-b2-2-2":{bg:"border", c:[["official",290,"hold",{flip:true}],["emre",130,"hold"],["sami",200,"stand"]], p:[["book",160,190],["book",230,190]]},
+"h-b2-2-3":{bg:"beirut", c:[["rami",250,"hug",{flip:true}],["sami",170,"hug"],["emre",80,"wave"]]},
+"h-b2-2-4":{bg:"sea", c:[["rami",120,"point"],["emre",210,"laugh"],["sami",300,"laugh",{flip:true}]]},
+"h-b2-2-5":{bg:"sea", t:"evening", c:[["rami",110,"hold",{sit:true}],["emre",200,"hold",{sit:true}],["sami",290,"hold",{sit:true,flip:true}]], p:[["manakish",110,186],["manakish",200,186],["manakish",290,186]]},
+"h-b2-2-6":{bg:"sea", t:"night", c:[["sami",110,"stand"],["emre",200,"point"],["rami",290,"laugh",{flip:true}]]},
+// --- C1-1 Sami'nin düğünü
+"h-c1-1-1":{bg:"house", c:[["ummsami",90,"hold"],["rania",200,"hold"],["abusami",320,"cheer",{flip:true}]], p:[["sweets",90,192],["heart",200,178],["sweets",200,196]]},
+"h-c1-1-2":{bg:"wedding", t:"night", c:[["manA",60,"dance",{s:.85}],["rania",130,"dance",{s:.85}],["emre",200,"dance",{s:.85}],["womanB",270,"dance",{s:.85}],["sami",340,"dance",{s:.85}]], p:[["drum",30,268]]},
+"h-c1-1-3":{bg:"wedding", t:"night", c:[["bride",280,"stand",{flip:true}],["groom",200,"hug",{flip:true}],["emre",120,"hug"]], fx:["confetti"]},
+"h-c1-1-4":{bg:"wedding", t:"night", c:[["teta",200,"cheer"],["ummsami",110,"cheer"],["rania",290,"cheer",{flip:true}]], fx:["confetti"]},
+"h-c1-1-5":{bg:"wedding", t:"night", c:[["abusami",200,"toast"],["groom",80,"laugh",{s:.9}],["bride",320,"laugh",{s:.9,flip:true}]], p:[["glass",236,118]]},
+"h-c1-1-6":{bg:"wedding", t:"night", c:[["emre",160,"laugh",{sit:true,y:250}],["rania",250,"laugh",{sit:true,y:250,flip:true}]], fx:["stars"]},
+// --- C1-2 Kasyûn'dan bakış
+"h-c1-2-1":{bg:"overlook", t:"night", c:[["sami",110,"hold",{sit:true,y:236}],["emre",200,"hold",{sit:true,y:236}],["rania",290,"hold",{sit:true,y:236,flip:true}]], p:[["glass",130,190],["glass",220,190],["glass",270,190]]},
+"h-c1-2-2":{bg:"overlook", t:"night", c:[["rania",200,"laugh",{s:1.15}]]},
+"h-c1-2-3":{bg:"overlook", t:"night", c:[["emre",160,"cover",{s:1.1}]], p:[["bubble",290,80]]},
+"h-c1-2-4":{bg:"overlook", t:"night", c:[["sami",120,"think"],["emre",270,"point",{flip:true}]]},
+"h-c1-2-5":{bg:"overlook", t:"dawn", c:[["rania",140,"give",{sit:true,y:236}],["emre",260,"give",{sit:true,y:236,flip:true}]]},
+"h-c1-2-6":{bg:"overlook", t:"dawn", c:[["sami",110,"stand"],["emre",200,"cheer"],["rania",290,"stand",{flip:true}]], fx:["sun"]}
+};
+
+</script>
+<script>
+// Hikâyelerde dokunulan kelimeler için ek sözlük: çekimli fiiller, edatlı biçimler ve özel adlar.
+// Anahtar: kelimenin hikâyede geçtiği biçim. Değer: [okunuş, Türkçe].
+window.GLOSS_EXTRA = {
+"أمره":["Emre","Emre (kişi adı)"],"رانيا":["Rânia","Rania (kişi adı)"],"سامي":["Sâmi","Sami (kişi adı)"],"وسامي":["w Sâmi","ve Sami"],"بسامي":["b-Sâmi","Sami’yi (aramak)"],"سعاد":["Suʿâd","Suad (kişi adı)"],"خليل":["Ḫalîl","Halil (kişi adı)"],"رامي":["Râmi","Rami (kişi adı)"],"أبو":["abu","…nın babası (Ebu)"],
+"من":["min","-den, -dan"],"مع":["maʿ","ile, birlikte"],"عند":["ʿind","-in yanında, -de"],"على":["ʿala","üstünde; -e"],"بعد":["baʿd","sonra"],"قبل":["ʾabl","önce"],"لك":["lak","baksana, be (hitap)"],"متل":["mitl","gibi"],"طول":["ṭûl","boyunca"],"أوّل":["awwal","ilk"],"عليك":["ʿalêk","senin için, sana"],"فيك":["fîk","sende; sana"],"فيكي":["fîki","elinden gelse (kadına)"],"إلها":["ilha","onun (dişil) var"],"معهن":["maʿhon","onlarla"],"عندو":["ʿindo","onun var"],"حالي":["ḥâli","kendim"],"لحالو":["la-ḥâlo","kendi kendine"],
+"إسطنبول":["Isṭanbûl","İstanbul"],"بإسطنبول":["b-Isṭanbûl","İstanbul’da"],"الشام":["iş-Şâm","Şam"],"بالشام":["bi ş-Şâm","Şam’da"],"الحميدية":["il-Ḥamîdiyye","Hamidiye (çarşı adı)"],"الأموي":["il-umawi","Emevi"],"بيروت":["Bêrût","Beyrut"],"لبيروت":["la-Bêrût","Beyrut’a"],"ببيروت":["b-Bêrût","Beyrut’ta"],"لبنان":["Lubnân","Lübnan"],"قاسيون":["Ḳâsyûn","Kasyûn (Şam’ın dağı)"],"للأتراك":["la-l-atrâk","Türklere"],"لرانيا":["la-Rânia","Rania’ya"],
+"الجرسون":["il-garsôn","garson"],"وسهلا":["w sahlan","(ahlan w sahlan) hoş geldin"],"بدّكن":["biddkon","istiyorsunuz"],"سمحت":["samaḥt","(law samaḥt) rica etsem"],"سمحتوا":["samaḥtu","(law samaḥtu) rica etsem (çoğul)"],"لتتعلّمي":["la-titʿallami","öğrenmen için (kadına)"],"تعلّمت":["tʿallamt","öğrendin / öğrendim"],"عشر":["ʿaşr","on"],"سنين":["snîn","yıl (çoğul)"],"تمانين":["tmânîn","seksen"],"يسلمو":["yislamu","sağ olsun (ellerine sağlık)"],"إيديكي":["îdêki","ellerin (kadına)"],"إيديك":["îdêk","ellerin"],"جمعة":["jumʿa","cuma"],"إن":["in","(in şâʾ allâh) eğer"],"شاء":["şâʾ","(inşallah) dilerse"],"الله":["allâh","Allah"],"والله":["walla","vallahi"],
+"يشتري":["yiştiri","satın almak (o)"],"راح":["râḥ","gitti"],"وراح":["w râḥ","ve gitti"],"أهلين":["ahlên","selam, hoş geldin"],"بتؤمروا":["bitʾmru","emredersiniz (ne arzu edersiniz)"],"تنزّل":["tnazzel","indirmek (fiyat)"],"أربعين":["arbʿîn","kırk"],"طلعوا":["ṭilʿu","çıktılar"],"عرف":["ʿiref","bildi"],"صار":["ṣâr","oldu; gitti (nereye ṣâr)"],"صارت":["ṣâret","oldu (dişil)"],"روح":["rûḥ","git!"],"تشتي":["tişti","yağmur yağıyor"],"ماشيين":["mâşyîn","yürüyorlar"],"منيح":["mnîḥ","iyi"],"أخد":["aḫad","aldı"],"خود":["ḫod","al!"],"تلات":["tlat","üç"],"وجابلو":["w jâb-lo","ve ona getirdi"],"صاحب":["ṣâḥeb","arkadaş, dost; sahip"],"حقيقي":["ḥaʾîʾi","gerçek"],"يومين":["yômên","iki gün"],"طلعت":["ṭilʿet","çıktı (dişil)"],"يشربوا":["yişrabu","içmek (onlar)"],"مسا":["masa","akşam"],"بتحكي":["btiḥki","anlatır, konuşur (o, dişil)"],
+"نسكن":["nuskon","otururduk (ikamet)"],"نفيق":["nfîʾ","uyanırdık"],"كانت":["kânet","idi (dişil)"],"تخبز":["tiḫbiz","ekmek pişirirdi"],"جيب":["jîb","getiririm / getir"],"نغنّي":["nġanni","şarkı söylerdik"],"ونضحك":["w niḍḥak","ve gülerdik"],"النهار":["in-nhâr","gündüz, gün"],"وقع":["wiʾiʿ","düştü"],"خافوا":["ḫâfu","korktular"],"وضحك":["w ḍiḥik","ve güldü"],"ضحك":["ḍiḥik","güldü"],"رجعت":["rjiʿt","dönerdim / döndüm"],"رجع":["rijiʿ","döndü"],
+"حطّ":["ḥaṭṭ","koydu"],"بجيبتو":["b-jêbto","cebine"],"عالدرج":["ʿa d-daraj","merdivende"],"قال":["'âl","dedi"],"وقال":["w 'âl","ve dedi"],"وقالت":["w 'âlet","ve dedi (kadın)"],"نام":["nâm","uyumak"],"فتح":["fataḥ","açtı"],"ضيّعت":["ḍayyaʿt","kaybettim"],"تحمل":["tiḥmil","taşıma (mâ tiḥmil hamm: dert etme)"],"همّ":["hamm","dert"],"عطاني":["ʿaṭâni","bana verdi"],"بعرف":["baʿrif","bilirim"],"عملت":["ʿmilt","yaptım / yapardım"],"بيقولوا":["byʾûlu","derler"],
+"ينصوّر":["yinṣawwar","çekiliyor (film)"],"وصل":["wiṣil","geldi, vardı"],"يشوفو":["yşûfo","onu görmek"],"مهلكن":["mahelkon","(ʿala mahelkon) yavaş olun"],"ينعاد":["yinʿâd","tekrarlanmak"],"نسي":["nisi","unuttu"],"جملتو":["jumilto","repliği, cümlesi"],"التالتة":["it-tâlte","üçüncü"],"يعيد":["yʿîd","tekrarlıyor"],"المراية":["il-mrâye","ayna"],"حلاوة":["ḥalâwe","(ya ḥalâwe) ne tatlı"],"صرت":["ṣirt","oldun / oldum"],"طوّل":["ṭawwel","(ṭawwel bâlak) sabırlı ol"],"بالك":["bâlak","aklın, sabrın"],"انصوّر":["nṣawwar","çekildi (film)"],"ينعرض":["yinʿaraḍ","yayınlanacak, gösterilecek"],"برمضان":["b-ramaḍân","Ramazan’da"],"احضرو":["iḥḍaro","onu izlemek"],
+"ركبوا":["rikbu","bindiler"],"بيمرق":["byimroʾ","geçiyor"],"بجبال":["b-jbâl","dağlardan"],"شجر":["şajar","ağaçlar"],"أرز":["arz","sedir"],"استنّوا":["stannu","beklediler"],"كمّلوا":["kammalu","devam ettiler"],"عجبكن":["ʿajabkon","hoşunuza gitti mi"],"منقول":["mnʾûl","deriz"],"أكلوا":["akalu","yediler"],"وشافوا":["w şâfu","ve gördüler"],"منفهم":["mnifham","anlarız"],
+"إجا":["ija","geldi"],"تحضّر":["tḥaḍḍer","hazırlanıyor(du)"],"عزفت":["ʿazafet","çaldı (müzik)"],"ورقص":["w raʾaṣ","ve dans etti"],"فات":["fât","girdi, katıldı"],"ضحكوا":["ḍiḥku","güldüler"],"ومبسوطين":["w mabsûṭîn","ve mutlu (çoğul)"],"بالهنا":["bi l-hana","mutlulukla"],"والبنين":["w il-banîn","ve evlatlarla"],"يبارك":["ybârek","bereket versin"],"حياتكن":["ḥayâtkon","hayatınız"],"بنسى":["bansa","unuturum"],
+"طلع":["ṭiliʿ","çıktı"],"تضوي":["tiḍwi","parlıyor"],"بتتذكّر":["btitzakkar","hatırlıyor musun"],"تعرف":["taʿrif","bilirdin"],"إحكي":["iḥki","konuşmak"],"إحلم":["iḥlam","rüya görmek"],"أصعب":["aṣʿab","en zor, daha zor"],"والحا":["w il-ḥâ","ve ḥâ harfi"],"علّمني":["ʿallamni","bana öğretti"],"خطّتك":["ḫuṭṭtak","planın"],"ضلّ":["ḍall","devam etmek, kalmak"],"إتعلّم":["itʿallam","öğrenmek"],"وعلّم":["w ʿallem","ve öğretmek"],"خضرا":["ḫaḍra","yeşil (yolun açık olsun)"]
+};
+
+</script>
+<script>/* Hikâye sahneleri için vektör çizim takımı.
+   drawScene(spec) → 400×300 boyutlu bir <svg> dizesi.
+   spec = {bg, t:"day|evening|night", fx:[...], c:[[kim, x, poz, {flip, s, y}]], p:[[eşya, x, y, {s}]], memory:true}
+   Renkler sahnenin kendi paletidir (resim gibi); tema değişince değişmez. */
+(function(){
+"use strict";
+var W = 400, H = 300, G = 268; // zemin çizgisi
+var uid = 0;
+function f(n){ return Math.round(n * 10) / 10; }
+
+/* ---------- karakterler ---------- */
+var P = {
+  emre:   {skin:"#e6b28a", hair:"#4a2e1f", hairStyle:"curly", beard:"#4a2e1f", top:"#6f7a3a", inner:"#f4f1ea", pants:"#2e3440", shoes:"#5a3b24", bag:"#8a5a33"},
+  rania:  {skin:"#d9a27a", hair:"#2b1d17", hairStyle:"long", top:"#d9a23a", inner:"#f4f1ea", pants:"#3b4a6b", shoes:"#e9e4da", ear:"#e2b33c"},
+  sami:   {skin:"#c98f68", hair:"#1d1715", hairStyle:"curlyShort", glasses:true, top:"#8fb8d8", pants:"#c8b48c", shoes:"#4a3528"},
+  teta:   {skin:"#e3b08c", scarf:"#f6f3ee", dress:"#2f3f6b", shoes:"#2b2b2b", old:true},
+  abusami:{skin:"#d8a07a", hair:"#9aa0a6", hairStyle:"short", mustache:"#7d8288", top:"#c9b28c", inner:"#b9c3cf", pants:"#3a3a3a", shoes:"#3a2a20", old:true},
+  ummsami:{skin:"#dcab84", scarf:"#7fa6c6", dress:"#e8a7a0", shoes:"#3a2a20"},
+  girl:   {skin:"#d9a27a", hair:"#2b1d17", hairStyle:"pigtails", top:"#e36f6f", pants:"#3b4a6b", shoes:"#e9e4da"},
+  boy:    {skin:"#d8a07a", hair:"#2b1d17", hairStyle:"short", top:"#f2c14e", pants:"#4a5a7a", shoes:"#3a2a20"},
+  waiter: {skin:"#cf9a72", hair:"#55595e", hairStyle:"short", mustache:"#55595e", top:"#ffffff", apron:"#f6f6f2", pants:"#2b2b2b", shoes:"#222"},
+  seller: {skin:"#c98f68", hair:"#2a201a", hairStyle:"short", mustache:"#2a201a", top:"#b5523b", inner:"#efe6d6", pants:"#3a3a3a", shoes:"#3a2a20"},
+  oldman: {skin:"#d1996f", hair:"#b9bec4", hairStyle:"cap", cap:"#5b4a3a", mustache:"#c9cdd2", top:"#7a6a58", pants:"#4a4038", shoes:"#2b2b2b", old:true},
+  pharma: {skin:"#e0ac86", hair:"#3a2a20", hairStyle:"short", glasses:true, top:"#ffffff", inner:"#7fb3a9", pants:"#3a4a5a", shoes:"#222"},
+  khalil: {skin:"#d6a07a", hair:"#c9cdd2", hairStyle:"bald", beard:"#d9dce0", top:"#7a5a8a", inner:"#e9e4da", pants:"#5a4a6a", shoes:"#3a2a20", old:true},
+  director:{skin:"#cf9a72", hair:"#2b2b2b", hairStyle:"cap", cap:"#2f2f2f", beard:"#2b2b2b", top:"#3d3d45", pants:"#2b2b33", shoes:"#111"},
+  rami:   {skin:"#e0ac86", hair:"#2a1d16", hairStyle:"neat", sunglasses:true, top:"#4f6d99", inner:"#f4f1ea", pants:"#e9e4da", shoes:"#f4f1ea"},
+  official:{skin:"#cf9a72", hair:"#2b2b2b", hairStyle:"cap", cap:"#3f4f3f", top:"#55664f", pants:"#3f4f3f", shoes:"#111"},
+  bride:  {skin:"#e3b08c", hair:"#2b1d17", hairStyle:"long", dress:"#fbfaf7", veil:true, shoes:"#fbfaf7"},
+  groom:  {skin:"#c98f68", hair:"#1d1715", hairStyle:"curlyShort", glasses:true, top:"#22303f", inner:"#ffffff", pants:"#22303f", shoes:"#111", flower:true},
+  makeup: {skin:"#e3b08c", hair:"#6a3b2a", hairStyle:"bun", top:"#2f2f2f", pants:"#2f2f2f", shoes:"#111"},
+  womanA: {skin:"#d9a27a", scarf:"#c9706a", dress:"#6a8a7a", shoes:"#3a2a20"},
+  womanB: {skin:"#e0ac86", scarf:"#e2b33c", dress:"#8a6aa0", shoes:"#3a2a20"},
+  manA:   {skin:"#cf9a72", hair:"#2a201a", hairStyle:"short", top:"#4a6a8a", pants:"#2e3440", shoes:"#222"},
+  manB:   {skin:"#b98462", hair:"#1d1715", hairStyle:"curlyShort", top:"#a0583a", pants:"#3a3a3a", shoes:"#222"}
+};
+P.groom.sami = true;
+// Dizi setinde kostümlü Sami: çizgili entari (kumbaz) ve kırmızı fes
+P.samiFez = {skin:"#c98f68", hair:"#1d1715", hairStyle:"fez", glasses:true, dress:"#8a6a4a", stripes:true, shoes:"#4a3528"};
+
+function hairSvg(c, x, hy){
+  var h = c.hair, s = c.hairStyle;
+  if (s === "curly") return '<g fill="'+h+'">'+[[-14,-9],[-6,-15],[4,-16],[13,-10],[17,-1],[-17,-1]].map(function(p){return '<circle cx="'+f(x+p[0])+'" cy="'+f(hy+p[1])+'" r="8"/>';}).join("")+'</g>';
+  if (s === "curlyShort") return '<g fill="'+h+'">'+[[-12,-10],[-4,-15],[5,-15],[13,-9],[-16,-2],[16,-2]].map(function(p){return '<circle cx="'+f(x+p[0])+'" cy="'+f(hy+p[1])+'" r="6.5"/>';}).join("")+'</g>';
+  if (s === "long") return '<path fill="'+h+'" d="M'+f(x-18)+' '+f(hy+2)+' Q'+f(x-20)+' '+f(hy-22)+' '+x+' '+f(hy-21)+' Q'+f(x+20)+' '+f(hy-22)+' '+f(x+18)+' '+f(hy+2)+' Q'+f(x+24)+' '+f(hy+30)+' '+f(x+16)+' '+f(hy+44)+' L'+f(x+10)+' '+f(hy+8)+' Q'+x+' '+f(hy-12)+' '+f(x-10)+' '+f(hy+8)+' L'+f(x-16)+' '+f(hy+44)+' Q'+f(x-24)+' '+f(hy+30)+' '+f(x-18)+' '+f(hy+2)+'Z"/>';
+  if (s === "pigtails") return '<path fill="'+h+'" d="M'+f(x-17)+' '+f(hy)+' Q'+x+' '+f(hy-26)+' '+f(x+17)+' '+f(hy)+' Q'+x+' '+f(hy-10)+' '+f(x-17)+' '+f(hy)+'Z"/><circle fill="'+h+'" cx="'+f(x-21)+'" cy="'+f(hy+4)+'" r="6"/><circle fill="'+h+'" cx="'+f(x+21)+'" cy="'+f(hy+4)+'" r="6"/>';
+  if (s === "bun") return '<circle fill="'+h+'" cx="'+x+'" cy="'+f(hy-20)+'" r="8"/><path fill="'+h+'" d="M'+f(x-17)+' '+f(hy)+' Q'+x+' '+f(hy-26)+' '+f(x+17)+' '+f(hy)+' Q'+x+' '+f(hy-11)+' '+f(x-17)+' '+f(hy)+'Z"/>';
+  if (s === "neat") return '<path fill="'+h+'" d="M'+f(x-17)+' '+f(hy-2)+' Q'+f(x-12)+' '+f(hy-24)+' '+f(x+8)+' '+f(hy-21)+' Q'+f(x+19)+' '+f(hy-17)+' '+f(x+17)+' '+f(hy-2)+' Q'+f(x+4)+' '+f(hy-13)+' '+f(x-17)+' '+f(hy-2)+'Z"/>';
+  if (s === "cap") return '<path fill="'+c.cap+'" d="M'+f(x-18)+' '+f(hy-3)+' Q'+x+' '+f(hy-26)+' '+f(x+18)+' '+f(hy-3)+'Z"/><rect fill="'+c.cap+'" x="'+f(x+8)+'" y="'+f(hy-6)+'" width="16" height="4" rx="2"/>';
+  if (s === "fez") return '<g fill="'+h+'"><circle cx="'+f(x-15)+'" cy="'+f(hy-2)+'" r="6"/><circle cx="'+f(x+15)+'" cy="'+f(hy-2)+'" r="6"/></g><path d="M'+f(x-14)+' '+f(hy-8)+' L'+f(x-11)+' '+f(hy-30)+' L'+f(x+11)+' '+f(hy-30)+' L'+f(x+14)+' '+f(hy-8)+'Z" fill="#b8282a"/><path d="M'+x+' '+f(hy-30)+' q8 4 10 16" stroke="#1d1715" stroke-width="2" fill="none"/>';
+  if (s === "bald") return '<path fill="'+h+'" d="M'+f(x-17)+' '+f(hy+2)+' Q'+f(x-18)+' '+f(hy-8)+' '+f(x-12)+' '+f(hy-10)+' L'+f(x-12)+' '+f(hy+2)+'Z M'+f(x+17)+' '+f(hy+2)+' Q'+f(x+18)+' '+f(hy-8)+' '+f(x+12)+' '+f(hy-10)+' L'+f(x+12)+' '+f(hy+2)+'Z"/>';
+  return '<path fill="'+h+'" d="M'+f(x-17)+' '+f(hy)+' Q'+f(x-16)+' '+f(hy-24)+' '+x+' '+f(hy-21)+' Q'+f(x+16)+' '+f(hy-24)+' '+f(x+17)+' '+f(hy)+' Q'+x+' '+f(hy-12)+' '+f(x-17)+' '+f(hy)+'Z"/>';
+}
+function faceSvg(c, x, hy, pose){
+  var s = "", eyeY = hy - 1;
+  var laugh = pose === "laugh" || pose === "cheer";
+  var sad = pose === "sad" || pose === "sick";
+  if (pose === "sleep" ) s += '<path d="M'+f(x-9)+' '+eyeY+' q3 3 6 0 M'+f(x+3)+' '+eyeY+' q3 3 6 0" stroke="#3a2a20" stroke-width="1.6" fill="none"/>';
+  else if (laugh) s += '<path d="M'+f(x-9)+' '+f(eyeY+1)+' q3 -4 6 0 M'+f(x+3)+' '+f(eyeY+1)+' q3 -4 6 0" stroke="#3a2a20" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
+  else s += '<circle cx="'+f(x-6)+'" cy="'+eyeY+'" r="2" fill="#2b1d17"/><circle cx="'+f(x+6)+'" cy="'+eyeY+'" r="2" fill="#2b1d17"/>';
+  if (c.glasses) s += '<g fill="none" stroke="#1d1715" stroke-width="1.6"><circle cx="'+f(x-6)+'" cy="'+eyeY+'" r="5"/><circle cx="'+f(x+6)+'" cy="'+eyeY+'" r="5"/><path d="M'+f(x-1)+' '+eyeY+'h2"/></g>';
+  if (c.sunglasses) s += '<path d="M'+f(x-14)+' '+f(hy-17)+' h28" stroke="#1d1715" stroke-width="3" stroke-linecap="round"/>';
+  if (c.beard) s += '<path fill="'+c.beard+'" opacity=".9" d="M'+f(x-15)+' '+f(hy+3)+' Q'+f(x-12)+' '+f(hy+20)+' '+x+' '+f(hy+19)+' Q'+f(x+12)+' '+f(hy+20)+' '+f(x+15)+' '+f(hy+3)+' Q'+f(x+8)+' '+f(hy+12)+' '+x+' '+f(hy+11)+' Q'+f(x-8)+' '+f(hy+12)+' '+f(x-15)+' '+f(hy+3)+'Z"/>';
+  if (c.mustache) s += '<path fill="'+c.mustache+'" d="M'+f(x-8)+' '+f(hy+7)+' Q'+x+' '+f(hy+3)+' '+f(x+8)+' '+f(hy+7)+' Q'+x+' '+f(hy+6)+' '+f(x-8)+' '+f(hy+7)+'Z"/>';
+  if (laugh) s += '<path d="M'+f(x-6)+' '+f(hy+8)+' Q'+x+' '+f(hy+16)+' '+f(x+6)+' '+f(hy+8)+'Z" fill="#8a3b3b"/>';
+  else if (sad) s += '<path d="M'+f(x-5)+' '+f(hy+11)+' Q'+x+' '+f(hy+7)+' '+f(x+5)+' '+f(hy+11)+'" stroke="#6a3b2b" stroke-width="1.6" fill="none"/>';
+  else if (pose === "shout") s += '<ellipse cx="'+x+'" cy="'+f(hy+10)+'" rx="4" ry="5" fill="#8a3b3b"/>';
+  else s += '<path d="M'+f(x-5)+' '+f(hy+8)+' Q'+x+' '+f(hy+13)+' '+f(x+5)+' '+f(hy+8)+'" stroke="#6a3b2b" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
+  s += '<circle cx="'+f(x-10)+'" cy="'+f(hy+5)+'" r="3" fill="#e88a7a" opacity=".35"/><circle cx="'+f(x+10)+'" cy="'+f(hy+5)+'" r="3" fill="#e88a7a" opacity=".35"/>';
+  if (c.old) s += '<path d="M'+f(x-12)+' '+f(hy-9)+' q4 -2 8 0 M'+f(x+4)+' '+f(hy-9)+' q4 -2 8 0" stroke="#a87a5a" stroke-width="1" fill="none"/>';
+  if (c.ear) s += '<circle cx="'+f(x-17)+'" cy="'+f(hy+6)+'" r="2" fill="'+c.ear+'"/><circle cx="'+f(x+17)+'" cy="'+f(hy+6)+'" r="2" fill="'+c.ear+'"/>';
+  return s;
+}
+// Kollar: omuzdan ele [dx, dy] (zemin noktasına göre)
+var ARMS = {
+  stand:[[-26,-62],[26,-62]], wave:[[-26,-62],[36,-150]], point:[[-26,-62],[58,-104]], phone:[[-26,-62],[16,-138]],
+  hold:[[-22,-80],[22,-80]], give:[[-26,-62],[52,-92]], cheer:[[-36,-150],[36,-150]], laugh:[[-26,-62],[26,-62]],
+  shout:[[-26,-62],[22,-140]], sad:[[-22,-64],[22,-64]], sick:[[-22,-64],[22,-64]], hug:[[30,-92],[48,-96]],
+  think:[[-26,-62],[12,-126]], dance:[[-40,-96],[40,-96]], toast:[[-26,-62],[30,-150]], search:[[-30,-50],[30,-50]],
+  key:[[-26,-62],[50,-118]], read:[[-14,-88],[14,-88]], sleep:[[-26,-62],[26,-62]], umbrella:[[-26,-62],[20,-120]], cover:[[-26,-62],[8,-128]]
+};
+function person(who, x, pose, o){
+  o = o || {};
+  var c = P[who] || P.manA, y = o.y != null ? o.y : G, s = o.s || 1, seated = pose === "sit" || o.sit;
+  var ap = pose === "sit" ? "stand" : pose;
+  var sy = seated ? 46 : 0; // oturunca beden aşağı iner
+  var g = '<g transform="translate('+x+' '+y+') scale('+(o.flip?-s:s)+' '+s+') translate('+(-x)+' '+(-y)+')">';
+  var top = y - 115 + sy, hy = y - 133 + sy, hasDress = !!c.dress;
+  // gölge
+  g += '<ellipse cx="'+x+'" cy="'+(y+2)+'" rx="26" ry="5" fill="#000" opacity=".12"/>';
+  // bacaklar
+  if (!seated){
+    if (!hasDress) g += '<rect x="'+(x-15)+'" y="'+(y-60)+'" width="12" height="58" rx="5" fill="'+c.pants+'"/><rect x="'+(x+3)+'" y="'+(y-60)+'" width="12" height="58" rx="5" fill="'+c.pants+'"/>';
+    g += '<ellipse cx="'+(x-10)+'" cy="'+(y-2)+'" rx="10" ry="5" fill="'+c.shoes+'"/><ellipse cx="'+(x+10)+'" cy="'+(y-2)+'" rx="10" ry="5" fill="'+c.shoes+'"/>';
+  }
+  // sırt çantası
+  if (c.bag && !seated) g += '<rect x="'+(x-30)+'" y="'+(top+6)+'" width="16" height="40" rx="6" fill="'+c.bag+'"/>';
+  // gövde
+  if (hasDress){
+    var dEnd = seated ? top + 62 : y - 4;
+    g += '<path fill="'+c.dress+'" d="M'+(x-20)+' '+top+' Q'+x+' '+(top-6)+' '+(x+20)+' '+top+' L'+(x+30)+' '+dEnd+' L'+(x-30)+' '+dEnd+'Z"/>';
+    if (c.stripes) for (var k = -22; k <= 22; k += 9) g += '<path d="M'+(x+k*0.75)+' '+(top+2)+' L'+(x+k*1.2)+' '+(dEnd-2)+'" stroke="#e9dcc0" stroke-width="2.5"/>';
+    if (who === "ummsami") g += [[-12,20],[8,34],[-6,52],[14,64],[-16,74]].map(function(p){return '<circle cx="'+(x+p[0])+'" cy="'+(top+p[1])+'" r="3.5" fill="#fff4e6" opacity=".8"/>';}).join("");
+  } else {
+    g += '<rect x="'+(x-22)+'" y="'+top+'" width="44" height="'+(seated?60:62)+'" rx="12" fill="'+c.top+'"/>';
+    if (c.inner) g += '<rect x="'+(x-7)+'" y="'+(top+2)+'" width="14" height="'+(seated?56:58)+'" rx="5" fill="'+c.inner+'"/>';
+    if (c.apron) g += '<rect x="'+(x-16)+'" y="'+(top+18)+'" width="32" height="'+(seated?40:50)+'" rx="4" fill="'+c.apron+'" stroke="#d8d4c8"/>';
+    if (c.flower) g += '<circle cx="'+(x-13)+'" cy="'+(top+12)+'" r="4" fill="#fff"/><circle cx="'+(x-13)+'" cy="'+(top+12)+'" r="1.6" fill="#e2b33c"/>';
+    if (who === "rania") g += '<rect x="'+(x-22)+'" y="'+(top+44)+'" width="44" height="6" fill="#c48f2c" opacity=".5"/>';
+  }
+  // kollar
+  var arm = ARMS[ap] || ARMS.stand, sleeve = hasDress ? c.dress : c.top;
+  [[-20, arm[0]], [20, arm[1]]].forEach(function(a){
+    var sx = x + a[0], shy = top + 8, hx = x + a[1][0], hyy = y + a[1][1] + sy;
+    g += '<path d="M'+sx+' '+shy+' L'+f(hx)+' '+f(hyy)+'" stroke="'+sleeve+'" stroke-width="11" stroke-linecap="round" fill="none"/>';
+    g += '<circle cx="'+f(hx)+'" cy="'+f(hyy)+'" r="5.5" fill="'+c.skin+'"/>';
+  });
+  // boyun + baş
+  g += '<rect x="'+(x-5)+'" y="'+(hy+12)+'" width="10" height="10" fill="'+c.skin+'"/>';
+  if (c.scarf){
+    g += '<circle cx="'+x+'" cy="'+hy+'" r="22" fill="'+c.scarf+'"/><path d="M'+(x-20)+' '+(hy+8)+' Q'+x+' '+(hy+34)+' '+(x+20)+' '+(hy+8)+'Z" fill="'+c.scarf+'"/>';
+    g += '<ellipse cx="'+x+'" cy="'+(hy+2)+'" rx="14" ry="16" fill="'+c.skin+'"/>';
+  } else {
+    if (c.hairStyle === "long") g += hairSvg(c, x, hy);
+    g += '<circle cx="'+x+'" cy="'+hy+'" r="17" fill="'+c.skin+'"/>';
+    if (c.hairStyle !== "long") g += hairSvg(c, x, hy); else g += '<path fill="'+c.hair+'" d="M'+(x-17)+' '+(hy-2)+' Q'+x+' '+(hy-26)+' '+(x+17)+' '+(hy-2)+' Q'+(x+6)+' '+(hy-12)+' '+(x-17)+' '+(hy-2)+'Z"/>';
+    if (c.veil) g += '<path d="M'+(x-20)+' '+(hy-14)+' Q'+x+' '+(hy-30)+' '+(x+20)+' '+(hy-14)+' L'+(x+30)+' '+(hy+70)+' L'+(x-30)+' '+(hy+70)+'Z" fill="#fff" opacity=".45"/>';
+  }
+  g += faceSvg(c, x, hy, pose);
+  return g + '</g>';
+}
+
+/* ---------- eşyalar ---------- */
+var PROPS = {
+  table: function(x,y,o){ var w=(o&&o.w)||110; return '<rect x="'+(x-w/2)+'" y="'+(y)+'" width="'+w+'" height="9" rx="3" fill="#8a5a3b"/><rect x="'+(x-w/2+8)+'" y="'+(y+9)+'" width="7" height="'+(G-y-9)+'" fill="#6f4630"/><rect x="'+(x+w/2-15)+'" y="'+(y+9)+'" width="7" height="'+(G-y-9)+'" fill="#6f4630"/>'; },
+  longtable: function(x,y){ return '<rect x="'+(x-170)+'" y="'+y+'" width="340" height="12" rx="4" fill="#f6efe3" stroke="#d8cbb4"/><rect x="'+(x-170)+'" y="'+(y+12)+'" width="340" height="'+(G-y-12)+'" fill="#e9dcc6"/>'; },
+  tea: function(x,y){ return '<path d="M'+(x-5)+' '+(y-14)+' h10 l-2 14 h-6z" fill="#c0392b" opacity=".85" stroke="#f3e2c0"/><ellipse cx="'+x+'" cy="'+y+'" rx="8" ry="2" fill="#d8b878"/>'; },
+  coffee: function(x,y){ return '<rect x="'+(x-6)+'" y="'+(y-10)+'" width="12" height="10" rx="2" fill="#f4f1ea" stroke="#c8b48c"/><circle cx="'+(x+8)+'" cy="'+(y-6)+'" r="3" fill="none" stroke="#c8b48c" stroke-width="2"/><path d="M'+(x-2)+' '+(y-14)+' q2 -4 0 -8 M'+(x+3)+' '+(y-14)+' q2 -4 0 -8" stroke="#bbb" fill="none"/>'; },
+  teapot: function(x,y){ return '<ellipse cx="'+x+'" cy="'+(y-10)+'" rx="12" ry="10" fill="#c9a44c"/><path d="M'+(x+10)+' '+(y-12)+' l12 -8" stroke="#c9a44c" stroke-width="4"/><rect x="'+(x-3)+'" y="'+(y-24)+'" width="6" height="5" fill="#c9a44c"/>'; },
+  tray: function(x,y){ return '<ellipse cx="'+x+'" cy="'+y+'" rx="22" ry="4" fill="#c9a44c"/>'+PROPS.teapot(x-8,y-2)+PROPS.tea(x+12,y-2); },
+  gift: function(x,y){ return '<rect x="'+(x-12)+'" y="'+(y-10)+'" width="24" height="17" rx="2" fill="#2f6f73"/><path d="M'+x+' '+(y-10)+' v17 M'+(x-12)+' '+(y-2)+' h24" stroke="#d64545" stroke-width="3"/><path d="M'+x+' '+(y-10)+' q-7 -8 -10 -2 M'+x+' '+(y-10)+' q7 -8 10 -2" stroke="#d64545" stroke-width="2.5" fill="none"/>'; },
+  book: function(x,y){ return '<rect x="'+(x-11)+'" y="'+(y-14)+'" width="22" height="16" rx="2" fill="#3f6f9f"/><rect x="'+(x-9)+'" y="'+(y-12)+'" width="18" height="12" fill="#f4f1ea"/>'; },
+  phone: function(x,y){ return '<rect x="'+(x-4)+'" y="'+(y-7)+'" width="8" height="14" rx="2" fill="#222"/>'; },
+  umbrella: function(x,y){ return '<path d="M'+(x-34)+' '+y+' Q'+x+' '+(y-38)+' '+(x+34)+' '+y+'Z" fill="#2f6f73"/><path d="M'+x+' '+y+' v62" stroke="#3a2a20" stroke-width="3"/>'; },
+  soup: function(x,y){ return '<path d="M'+(x-16)+' '+(y-8)+' h32 q-2 14 -16 14 q-14 0 -16 -14z" fill="#e2b33c"/><ellipse cx="'+x+'" cy="'+(y-8)+'" rx="16" ry="4" fill="#d67f2a"/><path d="M'+(x-5)+' '+(y-14)+' q3 -5 0 -10 M'+(x+5)+' '+(y-14)+' q3 -5 0 -10" stroke="#ccc" fill="none" stroke-width="1.5"/>'; },
+  bag: function(x,y){ return '<rect x="'+(x-9)+'" y="'+(y-10)+'" width="18" height="18" rx="3" fill="#e9dcc6" stroke="#b9a684"/><path d="M'+(x-4)+' '+(y-10)+' q4 -8 8 0" stroke="#b9a684" fill="none" stroke-width="2"/>'; },
+  key: function(x,y){ return '<circle cx="'+x+'" cy="'+y+'" r="5" fill="none" stroke="#e2b33c" stroke-width="3"/><path d="M'+(x+5)+' '+y+' h12 v4 M'+(x+13)+' '+y+' v4" stroke="#e2b33c" stroke-width="3" fill="none"/>'; },
+  scarfBlue: function(x,y){ return '<path d="M'+(x-10)+' '+(y-30)+' h20 l-4 46 h-12z" fill="#3f7fbf"/><path d="M'+(x-10)+' '+(y+14)+' h20" stroke="#e2b33c" stroke-width="2"/>'; },
+  scarfRed: function(x,y){ return '<path d="M'+(x-10)+' '+(y-30)+' h20 l-4 46 h-12z" fill="#c0392b"/><path d="M'+(x-10)+' '+(y+14)+' h20" stroke="#e2b33c" stroke-width="2"/>'; },
+  thermo: function(x,y){ return '<rect x="'+(x)+'" y="'+(y-2)+'" width="16" height="3" rx="1.5" fill="#ddd"/><circle cx="'+(x+16)+'" cy="'+(y-.5)+'" r="2.4" fill="#d64545"/>'; },
+  medicine: function(x,y){ return '<rect x="'+(x-9)+'" y="'+(y-12)+'" width="18" height="12" rx="2" fill="#fff" stroke="#7fb3a9"/><path d="M'+x+' '+(y-10)+' v8 M'+(x-4)+' '+(y-6)+' h8" stroke="#d64545" stroke-width="2"/>'; },
+  bread: function(x,y){ return '<ellipse cx="'+x+'" cy="'+y+'" rx="18" ry="5" fill="#e3b06a"/><ellipse cx="'+x+'" cy="'+(y-1)+'" rx="12" ry="2.5" fill="#f0c98a"/>'; },
+  dishes: function(x,y){ var s=""; [[-120,"#e9c46a"],[-70,"#8ab17d"],[-20,"#b5523b"],[30,"#e9c46a"],[80,"#8ab17d"],[125,"#d4a373"]].forEach(function(d){ s+='<ellipse cx="'+(x+d[0])+'" cy="'+(y-3)+'" rx="18" ry="6" fill="#fff" stroke="#ddd"/><ellipse cx="'+(x+d[0])+'" cy="'+(y-4)+'" rx="12" ry="3.5" fill="'+d[1]+'"/>'; }); return s+PROPS.bread(x-45,y-2)+PROPS.bread(x+55,y-2); },
+  sweets: function(x,y){ return '<rect x="'+(x-14)+'" y="'+(y-10)+'" width="28" height="12" rx="2" fill="#f6efe3" stroke="#d64545"/><path d="M'+(x-14)+' '+(y-4)+' h28" stroke="#d64545"/>'; },
+  jug: function(x,y){ return '<path d="M'+(x-8)+' '+y+' q-6 -16 2 -24 h12 q8 8 2 24z" fill="#c2703d"/><rect x="'+(x-4)+'" y="'+(y-30)+'" width="8" height="6" fill="#c2703d"/>'; },
+  lamp: function(x,y){ return '<circle cx="'+x+'" cy="'+(y-8)+'" r="22" fill="#ffd27a" opacity=".25"/><path d="M'+(x-7)+' '+y+' h14 l-3 -10 h-8z" fill="#8a5a3b"/><path d="M'+x+' '+(y-10)+' q4 -6 0 -12 q-4 6 0 12" fill="#f2a33a"/>'; },
+  camera: function(x,y){ return '<rect x="'+(x-22)+'" y="'+(y-60)+'" width="40" height="26" rx="4" fill="#2b2b2b"/><circle cx="'+(x+22)+'" cy="'+(y-47)+'" r="9" fill="#444" stroke="#111" stroke-width="3"/><circle cx="'+(x-10)+'" cy="'+(y-68)+'" r="8" fill="#333"/><circle cx="'+(x+8)+'" cy="'+(y-68)+'" r="8" fill="#333"/><path d="M'+x+' '+(y-34)+' l-18 34 M'+x+' '+(y-34)+' l18 34 M'+x+' '+(y-34)+' v34" stroke="#555" stroke-width="3"/>'; },
+  light: function(x,y){ return '<path d="M'+x+' '+y+' v-90" stroke="#555" stroke-width="3"/><rect x="'+(x-14)+'" y="'+(y-110)+'" width="28" height="22" rx="3" fill="#333"/><path d="M'+(x-12)+' '+(y-92)+' l-40 80 h104 l-40 -80z" fill="#fff6c8" opacity=".25"/>'; },
+  megaphone: function(x,y){ return '<path d="M'+x+' '+y+' l18 -9 v22 l-18 -9z" fill="#e2b33c"/><rect x="'+(x-6)+'" y="'+(y-3)+'" width="7" height="7" fill="#e2b33c"/>'; },
+  mirror: function(x,y){ return '<ellipse cx="'+x+'" cy="'+y+'" rx="16" ry="21" fill="#cfe6e8" stroke="#c9a44c" stroke-width="4"/><path d="M'+(x-6)+' '+(y-10)+' l8 -6" stroke="#fff" stroke-width="3"/>'; },
+  script: function(x,y){ return '<rect x="'+(x-9)+'" y="'+(y-12)+'" width="18" height="24" fill="#fff" stroke="#ccc"/><path d="M'+(x-5)+' '+(y-6)+' h10 M'+(x-5)+' '+(y-1)+' h10 M'+(x-5)+' '+(y+4)+' h7" stroke="#999"/>'; },
+  manakish: function(x,y){ return '<path d="M'+(x-12)+' '+y+' q12 -18 24 0z" fill="#e3b06a"/><path d="M'+(x-7)+' '+(y-3)+' q7 -10 14 0" stroke="#6f7a3a" stroke-width="3" fill="none"/>'; },
+  taxi: function(x,y){ return '<rect x="'+(x-55)+'" y="'+(y-34)+'" width="110" height="26" rx="8" fill="#f2c14e"/><path d="M'+(x-32)+' '+(y-34)+' l10 -18 h44 l10 18z" fill="#f2c14e"/><path d="M'+(x-26)+' '+(y-36)+' l7 -13 h16 v13z M'+(x+2)+' '+(y-36)+' v-13 h17 l7 13z" fill="#bfe0ea"/><circle cx="'+(x-32)+'" cy="'+(y-6)+'" r="10" fill="#2b2b2b"/><circle cx="'+(x+32)+'" cy="'+(y-6)+'" r="10" fill="#2b2b2b"/><rect x="'+(x-10)+'" y="'+(y-58)+'" width="20" height="6" rx="2" fill="#2b2b2b"/>'; },
+  bed: function(x,y){ return '<rect x="'+(x-80)+'" y="'+(y-40)+'" width="160" height="34" rx="8" fill="#e9dcc6"/><rect x="'+(x-86)+'" y="'+(y-70)+'" width="12" height="70" rx="4" fill="#8a5a3b"/><rect x="'+(x+74)+'" y="'+(y-50)+'" width="12" height="50" rx="4" fill="#8a5a3b"/>'; },
+  sleeper: function(x,y,o){ var c=P[(o&&o.who)||"sami"]; return '<ellipse cx="'+(x-58)+'" cy="'+(y-52)+'" rx="22" ry="10" fill="#fff"/><circle cx="'+(x-56)+'" cy="'+(y-60)+'" r="15" fill="'+c.skin+'"/>'+hairSvg(c, x-56, y-60)+(c.glasses?'<g fill="none" stroke="#1d1715" stroke-width="1.5"><circle cx="'+(x-62)+'" cy="'+(y-61)+'" r="4.5"/><circle cx="'+(x-51)+'" cy="'+(y-61)+'" r="4.5"/></g>':'')+'<path d="M'+(x-62)+' '+(y-55)+' q2 2 4 0 M'+(x-53)+' '+(y-55)+' q2 2 4 0" stroke="#3a2a20" fill="none" stroke-width="1.4"/><path d="M'+(x-42)+' '+(y-64)+' q60 -14 116 4 v22 h-116z" fill="#7fa6c6"/>'; },
+  shelf: function(x,y){ var s='<rect x="'+(x-60)+'" y="'+(y-80)+'" width="120" height="80" fill="#a87a52"/>'; for(var r=0;r<3;r++){ s+='<rect x="'+(x-56)+'" y="'+(y-76+r*26)+'" width="112" height="22" fill="#8a5a3b"/>'; for(var i=0;i<7;i++) s+='<rect x="'+(x-52+i*15)+'" y="'+(y-72+r*26)+'" width="11" height="16" fill="'+["#fff","#7fb3a9","#e2b33c","#d64545","#9fc3e0"][(i+r)%5]+'"/>'; } return s; },
+  counter: function(x,y){ return '<rect x="'+(x-70)+'" y="'+y+'" width="140" height="'+(G-y)+'" fill="#7a5238"/><rect x="'+(x-74)+'" y="'+(y-6)+'" width="148" height="8" rx="2" fill="#a87a52"/>'; },
+  door: function(x,y,o){ var c=(o&&o.c)||"#7a4a2b"; return '<rect x="'+(x-30)+'" y="'+(y-120)+'" width="60" height="120" rx="4" fill="'+c+'"/><rect x="'+(x-24)+'" y="'+(y-112)+'" width="48" height="50" rx="3" fill="none" stroke="#5a3520" stroke-width="3"/><circle cx="'+(x+18)+'" cy="'+(y-58)+'" r="3.5" fill="#e2b33c"/>'; },
+  opendoor: function(x,y){ return '<rect x="'+(x-30)+'" y="'+(y-120)+'" width="60" height="120" fill="#ffe2a8"/><path d="M'+(x-30)+' '+(y-120)+' l-16 8 v120 l16 -8z" fill="#7a4a2b"/>'; },
+  bench: function(x,y){ return '<rect x="'+(x-60)+'" y="'+(y-40)+'" width="120" height="14" rx="5" fill="#b5523b"/><rect x="'+(x-60)+'" y="'+(y-26)+'" width="120" height="26" fill="#8a5a3b"/>'; },
+  rug: function(x,y){ return '<ellipse cx="'+x+'" cy="'+y+'" rx="90" ry="12" fill="#b5523b" opacity=".8"/><ellipse cx="'+x+'" cy="'+y+'" rx="70" ry="7" fill="none" stroke="#e2b33c" stroke-width="2"/>'; },
+  drum: function(x,y){ return '<path d="M'+(x-12)+' '+(y-30)+' h24 l-6 30 h-12z" fill="#b5523b"/><ellipse cx="'+x+'" cy="'+(y-30)+'" rx="12" ry="4" fill="#efe6d6"/>'; },
+  glass: function(x,y){ return '<path d="M'+(x-5)+' '+(y-14)+' h10 l-2 14 h-6z" fill="#e2b33c" opacity=".8" stroke="#fff"/>'; },
+  bubble: function(x,y){ return '<ellipse cx="'+x+'" cy="'+y+'" rx="58" ry="34" fill="#fff" stroke="#c8b48c" stroke-width="2"/><circle cx="'+(x-40)+'" cy="'+(y+40)+'" r="6" fill="#fff" stroke="#c8b48c" stroke-width="2"/><circle cx="'+(x-52)+'" cy="'+(y+54)+'" r="3.5" fill="#fff" stroke="#c8b48c" stroke-width="2"/><text x="'+x+'" y="'+(y+10)+'" text-anchor="middle" font-size="28" fill="#1c6a73" font-family="Noto Naskh Arabic, serif">ع ح خ ش</text>'; },
+  zzz: function(x,y){ return '<text x="'+x+'" y="'+y+'" font-size="18" fill="#9aa8c8" font-family="Georgia, serif" font-weight="bold">z z Z</text>'; },
+  question: function(x,y){ return '<text x="'+x+'" y="'+y+'" font-size="30" fill="#d9792c" font-family="Georgia, serif" font-weight="bold">?</text>'; },
+  heart: function(x,y){ return '<path d="M'+x+' '+(y+8)+' l-10 -10 a6 6 0 0 1 10 -7 a6 6 0 0 1 10 7z" fill="#d64545"/>'; },
+  pile: function(x,y){ return '<ellipse cx="'+x+'" cy="'+y+'" rx="40" ry="12" fill="#8ab17d"/><ellipse cx="'+(x-10)+'" cy="'+(y-6)+'" rx="22" ry="7" fill="#6f9a5f"/>'; },
+  hooks: function(x,y){ return '<rect x="'+(x-20)+'" y="'+(y-16)+'" width="40" height="26" rx="3" fill="#a87a52"/>'+PROPS.key(x-8,y)+PROPS.key(x+6,y-6); }
+};
+
+/* ---------- arka planlar ---------- */
+function sky(t){
+  var id = "sk" + (++uid), a, b;
+  if (t === "night"){ a = "#16203a"; b = "#2d3c66"; }
+  else if (t === "evening"){ a = "#3d4e86"; b = "#f0a35e"; }
+  else if (t === "dawn"){ a = "#5b6fa8"; b = "#f6c27a"; }
+  else if (t === "rain"){ a = "#8e9aa6"; b = "#c3ccd3"; }
+  else if (t === "memory"){ a = "#e9d6b0"; b = "#f6ead2"; }
+  else { a = "#bfe0e3"; b = "#eef6f2"; }
+  return '<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+a+'"/><stop offset="1" stop-color="'+b+'"/></linearGradient></defs><rect width="'+W+'" height="'+H+'" fill="url(#'+id+')"/>';
+}
+// Şam taş duvarı: üstte düz taş, altta siyah-beyaz (ablaq) şeritler
+function ablaq(x, y, w, h, rows){
+  if (rows <= 1) return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="#5f5852"/>';
+  var s = '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="#e8dfcf"/>';
+  var band = h * 0.38, by = y + h - band, n = 5, rh = band / n;
+  for (var i = 0; i < n; i++) s += '<rect x="'+x+'" y="'+f(by+i*rh)+'" width="'+w+'" height="'+f(rh)+'" fill="'+(i%2 ? "#5f5852" : "#efe9dc")+'"/>';
+  for (var j = 0; j < 7; j++) s += '<path d="M'+(x+20+j*60)+' '+(y+20+(j%3)*30)+' h30" stroke="#d8ccb6" stroke-width="2"/>';
+  return s;
+}
+function ground(c){ return '<rect y="'+G+'" width="'+W+'" height="'+(H-G)+'" fill="'+(c||"#d8c8aa")+'"/>'; }
+function arch(x, y, w, h, fill){ return '<path d="M'+x+' '+(y+h)+' V'+(y+w/2)+' A'+(w/2)+' '+(w/2)+' 0 0 1 '+(x+w)+' '+(y+w/2)+' V'+(y+h)+'Z" fill="'+fill+'"/>'; }
+function lanterns(xs, y){ return xs.map(function(x){ return '<path d="M'+x+' '+(y-14)+' v8" stroke="#3a2a20"/><circle cx="'+x+'" cy="'+(y+4)+'" r="16" fill="#ffd27a" opacity=".22"/><path d="M'+(x-6)+' '+(y-6)+' h12 l-2 18 h-8z" fill="#e2a13a"/>'; }).join(""); }
+function stringLights(){ var s = '<path d="M0 40 Q100 80 200 40 T400 40" stroke="#5a4a3a" fill="none"/>'; for (var i = 0; i <= 20; i++){ var x = i*20, y = 40 + (Math.sin(i/20*Math.PI*2 - Math.PI/2) + 1) * 0 + (i<=10 ? 40*Math.sin(i/10*Math.PI) : 40*Math.sin((i-10)/10*Math.PI))*0.9; s += '<circle cx="'+x+'" cy="'+f(y+3)+'" r="4" fill="'+["#ffd27a","#f28a8a","#9fd0c8"][i%3]+'"/>'; } return s; }
+function dome(x, y, r, c){ return '<path d="M'+(x-r)+' '+y+' A'+r+' '+r+' 0 0 1 '+(x+r)+' '+y+'Z" fill="'+c+'"/><rect x="'+(x-1.5)+'" y="'+(y-r-10)+'" width="3" height="10" fill="'+c+'"/>'; }
+function minaret(x, y, h, c){ return '<rect x="'+(x-7)+'" y="'+(y-h)+'" width="14" height="'+h+'" fill="'+c+'"/><rect x="'+(x-10)+'" y="'+(y-h*0.7)+'" width="20" height="5" fill="'+c+'"/><path d="M'+(x-7)+' '+(y-h)+' L'+x+' '+(y-h-18)+' L'+(x+7)+' '+(y-h)+'Z" fill="'+c+'"/>'; }
+
+var BG = {
+  cafe: function(t){ return sky(t) + ablaq(0, 40, W, 190, 9) + arch(140, 70, 120, 160, "#5e7d6a") + arch(150, 82, 100, 148, "#a7c4b5") +
+    '<path d="M0 40 Q60 20 120 50 T260 40 T400 50" stroke="#4f7a4f" stroke-width="10" fill="none"/>' + [20,70,130,190,250,320,370].map(function(x){ return '<circle cx="'+x+'" cy="'+(44+(x%3)*4)+'" r="3.5" fill="#fff"/>'; }).join("") +
+    ground("#d9cbb0") + '<ellipse cx="335" cy="250" rx="34" ry="10" fill="#7fa6c6"/><rect x="330" y="214" width="10" height="34" fill="#c8b48c"/><circle cx="335" cy="212" r="7" fill="#9fd0e0"/>'; },
+  souq: function(t){ var s = sky("day") + '<rect width="'+W+'" height="'+H+'" fill="#a99a84"/>';
+    s += '<path d="M0 120 Q200 -40 400 120 V0 H0Z" fill="#5f646a"/>'; for (var i=0;i<40;i++) s += '<circle cx="'+(20+(i*97)%360)+'" cy="'+(20+(i*53)%70)+'" r="2.4" fill="#fff6c8"/>';
+    [[0,"#c0392b"],[60,"#2f6f73"],[300,"#e2b33c"],[350,"#8a6aa0"]].forEach(function(d){ s += '<rect x="'+d[0]+'" y="120" width="50" height="148" fill="#7a5a3a"/><path d="M'+(d[0]+6)+' 130 h12 v70 h-12z M'+(d[0]+26)+' 130 h12 v60 h-12z" fill="'+d[1]+'"/>'; });
+    return s + ground("#cdbb9a"); },
+  street: function(t){ var s = sky(t);
+    s += '<rect x="0" y="60" width="130" height="208" fill="#d8c8aa"/><rect x="270" y="50" width="130" height="218" fill="#cdb894"/><rect x="130" y="110" width="140" height="158" fill="#bfa982"/>';
+    s += '<rect x="20" y="100" width="90" height="30" fill="#8a5a3b"/><rect x="290" y="90" width="90" height="30" fill="#8a5a3b"/>' + dome(200, 110, 34, "#9aa7a0");
+    s += '<rect x="40" y="170" width="24" height="34" fill="#4a3a2a"/><rect x="320" y="160" width="24" height="34" fill="#4a3a2a"/>';
+    s += ground("#bcae96") + '<path d="M0 285 h400 M0 276 h400" stroke="#a89a82"/>';
+    if (t === "evening" || t === "night") s += '<rect width="'+W+'" height="'+H+'" fill="#1d2a4a" opacity=".28"/>' + lanterns([110, 290], 140);
+    return s; },
+  house: function(t){ return sky(t) + ablaq(0, 30, W, 238, 11) + '<rect x="250" y="150" width="70" height="118" fill="#7a4a2b"/><rect x="258" y="158" width="54" height="50" fill="none" stroke="#5a3520" stroke-width="3"/>' +
+    ground("#e3d7c1") + '<rect x="95" y="150" width="14" height="118" fill="#7a5238"/><circle cx="102" cy="130" r="54" fill="#5f8f5a"/>' + [[80,120],[118,110],[100,150],[130,140],[75,145]].map(function(p){ return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="5.5" fill="#f2d14e"/>'; }).join("") +
+    '<ellipse cx="190" cy="262" rx="40" ry="9" fill="#7fa6c6"/>'; },
+  dining: function(t){ return sky(t) + ablaq(0, 0, W, 268, 12) + '<rect width="'+W+'" height="268" fill="#1d2a4a" opacity="'+(t==="night"?".35":"0")+'"/>' + ground("#e3d7c1"); },
+  room: function(t){ var s = '<rect width="'+W+'" height="'+H+'" fill="#efe2cc"/><rect x="250" y="50" width="110" height="110" fill="'+(t==="rain"?"#8e9aa6":t==="night"?"#2d3c66":"#bfe0e3")+'" stroke="#8a5a3b" stroke-width="8"/><path d="M305 50 v110 M250 105 h110" stroke="#8a5a3b" stroke-width="5"/>';
+    if (t === "rain") for (var i=0;i<14;i++) s += '<path d="M'+(258+i*7)+' '+(58+(i*13)%40)+' l-4 14" stroke="#e9f1f5" stroke-width="1.5"/>';
+    if (t === "day") s += '<circle cx="335" cy="78" r="14" fill="#f6d36b"/>';
+    return s + '<rect y="'+G+'" width="'+W+'" height="'+(H-G)+'" fill="#b98a5e"/>'; },
+  pharmacy: function(){ return '<rect width="'+W+'" height="'+H+'" fill="#e6efe9"/>' + PROPS.shelf(110, 200) + PROPS.shelf(290, 200) + '<rect x="160" y="30" width="80" height="26" rx="4" fill="#2f8f6f"/><path d="M200 34 v18 M191 43 h18" stroke="#fff" stroke-width="5"/>' + ground("#cfd8d2"); },
+  stairs: function(t){ var s = '<rect width="'+W+'" height="'+H+'" fill="#c9bfae"/>'; for (var i=0;i<8;i++) s += '<rect x="'+(250+i*18)+'" y="'+(268-i*18)+'" width="'+(150-i*18)+'" height="18" fill="'+(i%2?"#a99c86":"#b6aa94")+'"/>';
+    s += PROPS.door(110, 268) + '<rect width="'+W+'" height="'+H+'" fill="#16203a" opacity=".35"/><circle cx="60" cy="40" r="10" fill="#ffd27a"/><circle cx="60" cy="40" r="40" fill="#ffd27a" opacity=".15"/>';
+    return s + ground("#9a8f7c"); },
+  village: function(){ var s = sky("memory") + '<path d="M0 170 L80 90 L160 160 L240 70 L330 150 L400 100 V268 H0Z" fill="#c9b48c"/>';
+    [[60,"#d8c6a0"],[170,"#cdb88f"],[300,"#d8c6a0"]].forEach(function(h){ s += '<rect x="'+h[0]+'" y="170" width="70" height="60" fill="'+h[1]+'"/><path d="M'+(h[0]-6)+' 170 h82 l-41 -26z" fill="#a8835a"/><rect x="'+(h[0]+28)+'" y="200" width="14" height="30" fill="#7a5a3a"/>'; });
+    return s + ground("#d7c49e"); },
+  spring: function(){ return sky("memory") + '<path d="M0 160 L100 80 L220 150 L320 90 L400 140 V268 H0Z" fill="#c9b48c"/>' + ground("#d7c49e") + '<rect x="250" y="190" width="90" height="78" fill="#b3a07c"/><path d="M285 222 q6 20 0 40" stroke="#7fa6c6" stroke-width="6" fill="none"/><ellipse cx="290" cy="262" rx="30" ry="6" fill="#7fa6c6"/><path d="M40 268 q30 -60 70 0" fill="#9a5a3a"/><circle cx="75" cy="242" r="10" fill="#f2a33a"/>'; },
+  olives: function(){ var s = sky("memory") + ground("#cdbb8a"); [[60,150],[200,130],[340,150]].forEach(function(p){ s += '<rect x="'+(p[0]-6)+'" y="'+p[1]+'" width="12" height="'+(268-p[1])+'" fill="#7a6a4a"/><ellipse cx="'+p[0]+'" cy="'+(p[1]-10)+'" rx="56" ry="38" fill="#9aae8a"/><ellipse cx="'+(p[0]+14)+'" cy="'+(p[1]-24)+'" rx="30" ry="20" fill="#879c78"/>'; for(var i=0;i<8;i++) s += '<circle cx="'+(p[0]-40+i*11)+'" cy="'+(p[1]-16+(i%3)*10)+'" r="2.5" fill="#3d4a2a"/>'; }); return s + '<ellipse cx="200" cy="270" rx="150" ry="10" fill="#efe6d6"/>'; },
+  shop: function(){ var s = '<rect width="'+W+'" height="'+H+'" fill="#e8d9bd"/>'; var cols = ["#c0392b","#3f7fbf","#e2b33c","#2f6f73","#8a6aa0","#d67f2a","#6f9a5f"]; for (var i=0;i<14;i++){ var x = 10 + i*28; s += '<path d="M'+x+' 30 h20 l-3 '+(70+(i%3)*20)+' h-14z" fill="'+cols[i%7]+'"/>'; } return s + PROPS.counter(200, 210) + ground("#c8b48c"); },
+  mosque: function(t){ var s = sky(t||"day") + '<rect x="0" y="120" width="400" height="148" fill="#e9dcc6"/>'; for (var i=0;i<8;i++) s += arch(10+i*49, 150, 38, 118, "#b9a684");
+    s += minaret(330, 120, 100, "#d8c8aa") + dome(200, 120, 50, "#7a9a8a") + '<rect y="'+G+'" width="'+W+'" height="'+(H-G)+'" fill="#f4efe6"/><path d="M0 285 h400" stroke="#e0d6c4"/>';
+    return s + '<path d="M60 60 q6 -6 12 0 q6 -6 12 0 M300 40 q5 -5 10 0 q5 -5 10 0" stroke="#555" fill="none" stroke-width="2"/>'; },
+  set: function(t){ return BG.street(t||"day") + PROPS.light(30, 268) + PROPS.light(370, 268); },
+  mountainroad: function(){ var s = sky("day") + '<path d="M0 150 L70 70 L150 140 L240 60 L330 130 L400 80 V268 H0Z" fill="#7f9a72"/><path d="M0 200 L90 130 L190 190 L290 120 L400 180 V268 H0Z" fill="#5f7d56"/>';
+    [[40,190],[120,170],[340,175],[370,195]].forEach(function(p){ s += '<path d="M'+p[0]+' '+(p[1]-40)+' l-16 22 h8 l-12 18 h40 l-12 -18 h8z" fill="#3f5a3a"/>'; });
+    return s + '<path d="M0 268 Q200 220 400 268 V300 H0Z" fill="#8a8a86"/><path d="M0 284 Q200 236 400 284" stroke="#f4f1ea" stroke-dasharray="14 10" fill="none" stroke-width="3"/>'; },
+  border: function(){ return sky("day") + '<rect x="40" y="110" width="320" height="158" fill="#d8d4c8"/><rect x="40" y="96" width="320" height="16" fill="#8a8a86"/><rect x="250" y="150" width="80" height="50" fill="#bfe0ea" stroke="#777" stroke-width="4"/><rect x="60" y="160" width="40" height="108" fill="#777"/>' + ground("#bdb6a6"); },
+  beirut: function(){ return sky("day") + '<rect x="20" y="70" width="70" height="198" fill="#cfd8de"/><rect x="100" y="110" width="60" height="158" fill="#e6c9a8"/><rect x="240" y="60" width="80" height="208" fill="#b9c8d4"/><rect x="330" y="120" width="60" height="148" fill="#e8d9bd"/>' + [30,45,60,75].map(function(y){ return '<rect x="30" y="'+(y+40)+'" width="50" height="6" fill="#9fb3c2"/>'; }).join("") + ground("#cfc6b4"); },
+  sea: function(t){ var s = sky(t); s += '<rect y="170" width="'+W+'" height="98" fill="'+(t==="evening"?"#3d5a86":"#3f8fbf")+'"/>';
+    if (t === "evening") s += '<circle cx="300" cy="170" r="30" fill="#f6a34a"/><rect y="170" width="'+W+'" height="98" fill="#3d5a86" opacity=".6"/><path d="M270 190 h60 M280 205 h40" stroke="#f6a34a" stroke-width="3" opacity=".7"/><path d="M340 170 l14 -40 l10 40z" fill="#4a3a3a"/>';
+    else s += '<circle cx="320" cy="60" r="18" fill="#f6d36b"/>';
+    if (t === "night") s += '<rect width="'+W+'" height="'+H+'" fill="#16203a" opacity=".45"/>' + [40,110,180,250,320,380].map(function(x){ return '<circle cx="'+x+'" cy="'+(150+(x%4)*3)+'" r="2" fill="#ffd27a"/>'; }).join("");
+    return s + '<rect y="230" width="'+W+'" height="6" fill="#ece5d6"/>' + [20,60,100,140,180,220,260,300,340,380].map(function(x){ return '<rect x="'+x+'" y="230" width="4" height="38" fill="#ece5d6"/>'; }).join("") + ground("#cfc6b4"); },
+  wedding: function(t){ return sky(t||"night") + ablaq(0, 60, W, 208, 9) + '<rect width="'+W+'" height="268" fill="#16203a" opacity=".3"/>' + stringLights() + ground("#e3d7c1"); },
+  overlook: function(t){ var s = sky(t||"night"); if (t !== "dawn") for (var i=0;i<30;i++) s += '<circle cx="'+((i*71)%400)+'" cy="'+((i*37)%110)+'" r="1.3" fill="#fff"/>';
+    s += '<path d="M0 190 Q200 160 400 190 V268 H0Z" fill="'+(t==="dawn"?"#7a6a5a":"#1d2440")+'"/>';
+    for (var j=0;j<120;j++) s += '<circle cx="'+((j*53)%400)+'" cy="'+(195+(j*29)%60)+'" r="'+(j%5?1.2:1.8)+'" fill="'+(j%4?"#ffd27a":"#fff3c8")+'" opacity="'+(t==="dawn"?".5":".9")+'"/>';
+    s += dome(120, 200, 14, t==="dawn"?"#8a7a6a":"#2d3555") + minaret(150, 205, 34, t==="dawn"?"#8a7a6a":"#2d3555");
+    return s + '<rect y="232" width="'+W+'" height="36" fill="#6a5a4a"/>' + ablaq(0, 232, W, 10, 1) + ground("#4a4038"); }
+};
+
+/* ---------- efektler ---------- */
+var FX = {
+  rain: function(){ var s = '<g stroke="#e9f1f5" stroke-width="1.5" opacity=".8">'; for (var i=0;i<60;i++){ var x = (i*67)%400, y = (i*41)%270; s += '<path d="M'+x+' '+y+' l-5 14"/>'; } return s + '</g>'; },
+  stars: function(){ var s = ""; for (var i=0;i<25;i++) s += '<circle cx="'+((i*83)%400)+'" cy="'+((i*29)%90)+'" r="1.3" fill="#fff"/>'; return s; },
+  confetti: function(){ var s = ""; for (var i=0;i<50;i++) s += '<rect x="'+((i*67)%400)+'" y="'+((i*43)%220)+'" width="5" height="3" fill="'+["#f28a8a","#ffd27a","#9fd0c8","#fff"][i%4]+'" transform="rotate('+(i*37%90)+' '+((i*67)%400)+' '+((i*43)%220)+')"/>'; return s; },
+  sun: function(){ return '<circle cx="60" cy="60" r="22" fill="#f6d36b"/><circle cx="60" cy="60" r="40" fill="#f6d36b" opacity=".2"/>'; },
+  sweat: function(){ return ""; }
+};
+
+/* ---------- birleştir ---------- */
+function drawScene(spec){
+  if (!spec) return "";
+  var t = spec.t || "day";
+  var body = (BG[spec.bg] || BG.street)(t);
+  (spec.back || []).forEach(function(p){ body += (PROPS[p[0]] || function(){ return ""; })(p[1], p[2], p[3]); });
+  (spec.c || []).forEach(function(c){ body += person(c[0], c[1], c[2] || "stand", c[3]); });
+  (spec.p || []).forEach(function(p){ body += (PROPS[p[0]] || function(){ return ""; })(p[1], p[2], p[3]); });
+  (spec.fx || []).forEach(function(n){ body += (FX[n] || function(){ return ""; })(); });
+  if (spec.memory) body = '<g filter="url(#sepia'+uid+')">' + body + '</g>';
+  var defs = spec.memory ? '<defs><filter id="sepia'+uid+'"><feColorMatrix type="matrix" values=".45 .55 .12 0 .02  .38 .52 .1 0 .02  .3 .42 .1 0 0  0 0 0 1 0"/></filter></defs>' : "";
+  var frame = spec.memory ? '<rect x="4" y="4" width="392" height="292" fill="none" stroke="#e9dcc0" stroke-width="8" rx="6"/>' : "";
+  return '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" role="img">' + defs + body + frame + '</svg>';
+}
+window.drawScene = drawScene;
+})();
+</script>
 <script>(function(){
 "use strict";
 var STAGES = window.STAGES || [];
@@ -2659,13 +3261,13 @@ var SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wid
 function spk(text, tl){ return '<button class="spk" type="button" data-say="'+esc(text)+'"'+(tl?' data-tl="'+esc(tl)+'"':'')+' aria-label="Dinle">'+SPK+'</button>'; }
 
 /* ---------- state ---------- */
-var DEFAULT = { v:1, updated:0, done:{}, exams:{}, srs:{}, xp:0, streak:{n:0,last:-1}, seen:{}, settings:{harakat:true, translit:true, rate:0.8} };
+var DEFAULT = { v:1, updated:0, done:{}, exams:{}, srs:{}, stories:{}, xp:0, streak:{n:0,last:-1}, seen:{}, settings:{harakat:true, translit:true, rate:0.8} };
 var state = JSON.parse(JSON.stringify(DEFAULT));
 var LSKEY = "yalla-sami-progress-v1";
 function merge(s){
   var n = JSON.parse(JSON.stringify(DEFAULT));
   if (!s || typeof s !== "object") return n;
-  ["done","exams","srs","seen"].forEach(function(k){ if (s[k] && typeof s[k]==="object") n[k]=s[k]; });
+  ["done","exams","srs","seen","stories"].forEach(function(k){ if (s[k] && typeof s[k]==="object") n[k]=s[k]; });
   // eski kayıtlar: tekrar anahtarlarını harekesiz biçime taşı
   var srs = {}; Object.keys(n.srs).forEach(function(k){ var i = k.indexOf("|"); var nk = k.slice(0,i).replace(HARAKAT,"") + k.slice(i); if (!srs[nk] || srs[nk].b < n.srs[k].b) srs[nk] = n.srs[k]; }); n.srs = srs;
   if (typeof s.xp === "number") n.xp = s.xp;
@@ -2757,6 +3359,10 @@ function dueList(){
   LESSONS.forEach(function(l){ allWords(l).forEach(function(w){
     var k = wkey(w); if (seen[k]) return; seen[k] = 1;
     var s = state.srs[k]; if (s && s.d <= t) out.push({w:w, l:l, s:s});
+  }); });
+  (window.STORIES || []).forEach(function(st){ st.words.forEach(function(w){
+    var k = wkey(w); if (seen[k]) return; seen[k] = 1;
+    var s = state.srs[k]; if (s && s.d <= t) out.push({w:w, l:{t:"Hikâye: " + st.t}, s:s});
   }); });
   return out;
 }
@@ -2850,7 +3456,19 @@ function viewHome(){
     h += '<button class="lesson exam'+(ep?" done":"")+(eu?"":" locked")+(isNextX?" next":"")+'" '+(eu?'data-open="x:'+st.id+'"':'aria-disabled="true" data-locked="1"')+'>'+
       '<span class="num" lang="ar">امتحان</span><span class="t"><b>Aşama sınavı</b><small>'+esc(st.title)+' — tüm aşamadan 20 soru, geçme notu %80</small></span>'+
       '<span class="score">'+(ep?("%"+state.exams[st.id]):(eu?"Açık":"Kilitli"))+'</span></button>';
-    h += '</div></section>';
+    h += '</div>';
+    var sts = STORIES.filter(function(s){ return s.stage === st.id; });
+    if (sts.length){
+      h += '<h3 class="stories-h">Resimli hikâyeler</h3><div class="story-cards">';
+      sts.forEach(function(s){
+        var un = storyUnlocked(s), dn = state.stories[s.id] != null, after = BYID[s.after];
+        h += '<button class="story-card'+(un?"":" locked")+(dn?" done":"")+'" '+(un?'data-story="'+s.id+'"':'aria-disabled="true" data-slocked="'+esc(after?after.t:"")+'"')+'>'+
+          '<span class="story-thumb">'+storyCover(s)+'</span><span class="t"><b>'+esc(s.t)+'</b><small>'+esc(s.s)+'</small>'+
+          '<small class="st">'+(dn?"Okundu · %"+state.stories[s.id]:(un?s.scenes.length+" sahne · okumaya hazır":"«"+esc(after?after.t:"")+"» dersinden sonra açılır"))+'</small></span></button>';
+      });
+      h += '</div>';
+    }
+    h += '</section>';
   });
   h += '</div>';
   app.innerHTML = h;
@@ -3156,6 +3774,13 @@ function finishQuiz(){
       h = '<div class="panel result"><div class="pct">%'+pct+'</div><h2>Biraz daha çalışalım</h2><p>Geçmek için en az %80 gerekiyor. Kelimeleri ve diyaloğu tekrar gözden geçirip sınava yeniden gir.</p>'+
         '<div class="row"><button class="btn alt" data-step="1">Kelimelere dön</button><button class="btn" data-redo="1">Sınavı tekrarla</button></div></div>';
     }
+  } else if (Q.mode === "story"){
+    var sto = Q.opts.story, firstS = state.stories[sto.id] == null;
+    state.stories[sto.id] = Math.max(pct, state.stories[sto.id] || 0);
+    var t0 = today(); sto.words.forEach(function(w){ var k = wkey(w); if (!state.srs[k]) state.srs[k] = {b:1, d:t0+1, l:sto.id}; });
+    addXP(firstS ? 15 : 3); save(); header();
+    h = '<div class="panel result"><div class="pct">%'+pct+'</div><h2>Hikâye bitti!</h2><p>'+Q.right+' / '+Q.qs.length+' soruyu doğru cevapladın. Hikâyenin '+sto.words.length+' kelimesi tekrar destene eklendi.</p>'+
+      '<div class="row"><button class="btn alt" data-story="'+sto.id+'">Yeniden oku</button><button class="btn" data-go="home">Ders haritası</button></div></div>';
   } else if (Q.mode === "stage"){
     var st = Q.opts.stage;
     if (pct >= 80){
@@ -3381,15 +4006,102 @@ app.addEventListener("submit", function(e){
   e.preventDefault();
   var v = $("#chatin").value; $("#chatin").value = ""; chatSend(v);
 });
+/* ---------- resimli hikâyeler ---------- */
+var STORIES = window.STORIES || [], SCENES = window.SCENES || {};
+var STBYID = {}; STORIES.forEach(function(s){ STBYID[s.id] = s; });
+var COVERS = {"h-a1-1": "img/h-a1-1-1.jpg"};
+function storyUnlocked(s){ var a = BYID[s.after]; return !a || isDone(a); }
+function sceneArt(img){ return SCENES[img] && window.drawScene ? window.drawScene(SCENES[img]) : ""; }
+function storyCover(s){
+  if (COVERS[s.id]) return '<img src="'+COVERS[s.id]+'" alt="" loading="lazy">';
+  return sceneArt(s.scenes[0].img);
+}
+// Dokunulan kelimenin anlamı: hikâye kelimeleri + tüm ders kelimeleri
+var GLOSS = null;
+function glossKey(a){ return String(a).replace(HARAKAT, "").replace(/[؟،!?.,:«»"()…—\-]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه"); }
+function buildGloss(){
+  GLOSS = {};
+  function add(w){ String(w[0]).split(/\s+/).length === 1 && (GLOSS[glossKey(w[0])] = GLOSS[glossKey(w[0])] || w); }
+  LESSONS.forEach(function(l){ allWords(l).forEach(add); });
+  STORIES.forEach(function(s){ s.words.forEach(add); });
+  var ex = window.GLOSS_EXTRA || {};
+  Object.keys(ex).forEach(function(k){ var g = glossKey(k); if (!GLOSS[g]) GLOSS[g] = [k, ex[k][0], ex[k][1]]; });
+}
+function lookup(tok){
+  if (!GLOSS) buildGloss();
+  var k = glossKey(tok); if (!k) return null;
+  var tries = [k], pre = ["وال","بال","عال","لل","ال","و","ب","ع","ل","هال"], suf = ["كن","هن","نا","ها","ك","ي","و","ا","ه"];
+  pre.forEach(function(p){ if (k.indexOf(p) === 0 && k.length - p.length >= 2) tries.push(k.slice(p.length)); });
+  tries.slice().forEach(function(x){ suf.forEach(function(s){ if (x.length - s.length >= 2 && x.slice(-s.length) === s) tries.push(x.slice(0, -s.length)); }); });
+  for (var i = 0; i < tries.length; i++) if (GLOSS[tries[i]]) return GLOSS[tries[i]];
+  return null;
+}
+var ST = null; // {s, i}
+function openStory(id){
+  var s = STBYID[id]; if (!s) return go("home");
+  if (!storyUnlocked(s)){ toast("Bu hikâye henüz kilitli."); return go("home"); }
+  Q = null; ST = {s:s, i:0, hideTr:false}; location.hash = "hikaye-" + id; renderStory();
+}
+function renderStory(){
+  setNav("home");
+  var s = ST.s, i = ST.i, n = s.scenes.length;
+  var h = '<div class="wrap"><div class="lhead"><button class="crumb" data-go="home">← Ders haritası</button><h1>'+esc(s.t)+'</h1><p class="muted">'+esc(s.s)+'</p></div>';
+  if (i < n){
+    var sc = s.scenes[i];
+    h += '<div class="panel story"><div class="qhead"><div class="prog" aria-hidden="true"><i style="width:'+Math.round(100*(i+1)/n)+'%"></i></div><span class="small muted">Sahne '+(i+1)+' / '+n+'</span></div>';
+    h += '<figure class="scene">'+sceneArt(sc.img)+'</figure>';
+    h += '<div class="row" style="justify-content:space-between"><button class="btn alt small" data-sall="1">'+SPK+' Sahneyi dinle</button><button class="btn ghost small" data-strtog="1">'+(ST.hideTr?"Türkçeyi göster":"Türkçeyi gizle")+'</button></div>';
+    h += '<p class="muted small">Bir kelimenin anlamını görmek için üstüne dokun.</p><div class="dialog">';
+    sc.l.forEach(function(x, j){
+      var toks = arTxt(x[0]).split(/\s+/).map(function(t, k){ return '<span class="tok" data-tok="'+esc(t)+'" data-li="'+j+'">'+esc(t)+'</span>'; }).join(" ");
+      h += '<div class="line sline"><div><span class="ar" lang="ar">'+toks+'</span>'+TL(x[1])+'<div class="tr"'+(ST.hideTr?" hidden":"")+'>'+esc(x[2])+'</div><div class="gloss" id="gl-'+j+'" hidden></div></div>'+spk(x[0], x[1])+'</div>';
+    });
+    h += '</div><div class="row" style="justify-content:space-between">'+(i>0?'<button class="btn ghost" data-sprev="1">← Önceki</button>':'<span></span>')+'<button class="btn" data-snext="1">'+(i+1<n?"Sonraki sahne →":"Kelimeler ve sorular →")+'</button></div></div>';
+  } else {
+    h += '<div class="panel"><h2>Hikâyenin kelimeleri</h2><div class="words">';
+    s.words.forEach(function(w){ h += '<div class="word">'+spk(w[0], w[1])+AR(w[0])+TL(w[1])+'<span class="tr">'+esc(w[2])+'</span></div>'; });
+    h += '</div><div class="row"><button class="btn ghost" data-sprev="1">← Hikâyeye dön</button><button class="btn warm" data-squiz="1">Soruları cevapla →</button></div></div>';
+  }
+  app.innerHTML = h + '<div id="sqhost"></div></div>';
+  window.scrollTo(0,0);
+}
+function storyQuiz(){
+  var s = ST.s;
+  var qs = s.quiz.map(function(q){ return {k:"Anladın mı?", type:"mc", prompt:'<span class="big">'+esc(q[0])+'</span>', opts:shuffle(q[1].map(function(o, i){ return {html:esc(o), ok:i===0}; })), ans:null}; });
+  app.innerHTML = '<div class="wrap"><div class="lhead"><button class="crumb" data-go="home">← Ders haritası</button><h1>'+esc(s.t)+'</h1><p class="muted">Hikâyeyle ilgili '+qs.length+' soru</p></div><div id="sqhost"></div></div>';
+  startQuiz($("#sqhost"), qs, "story", {story:s});
+}
+function sayScene(){
+  var lines = ST.s.scenes[ST.i].l.slice(), k = 0;
+  if (!("speechSynthesis" in window)) return say("");
+  function next(){ if (k >= lines.length) return; var x = lines[k++]; say(x[0], x[1]); var u = speechSynthesis; var iv = setInterval(function(){ if (!u.speaking){ clearInterval(iv); setTimeout(next, 350); } }, 200); }
+  next();
+}
 function route(){
   var h = (location.hash||"").replace("#","");
   if (h.indexOf("ders-") === 0 && BYID[h.slice(5)] && unlocked(BYID[h.slice(5)])){ openLesson(h.slice(5)); header(); }
+  else if (h.indexOf("hikaye-") === 0 && STBYID[h.slice(7)] && storyUnlocked(STBYID[h.slice(7)])){ openStory(h.slice(7)); header(); }
   else go("home");
 }
 app.addEventListener("click", function(e){
   var t = e.target;
   var b;
   if ((b = t.closest("[data-locked]"))){ toast("Kilitli. Sıradaki dersi tamamlayınca açılır."); return; }
+  if ((b = t.closest("[data-slocked]"))){ toast("Bu hikâye «" + b.getAttribute("data-slocked") + "» dersini bitirince açılır."); return; }
+  if ((b = t.closest("[data-story]"))){ openStory(b.getAttribute("data-story")); return; }
+  if (t.closest("[data-snext]")){ ST.i++; renderStory(); return; }
+  if (t.closest("[data-sprev]")){ ST.i = Math.max(0, ST.i-1); renderStory(); return; }
+  if (t.closest("[data-squiz]")){ storyQuiz(); return; }
+  if (t.closest("[data-sall]")){ sayScene(); return; }
+  if (t.closest("[data-strtog]")){ ST.hideTr = !ST.hideTr; renderStory(); return; }
+  if ((b = t.closest("[data-tok]"))){
+    var li = b.getAttribute("data-li"), gl = $("#gl-"+li), w = lookup(b.getAttribute("data-tok"));
+    document.querySelectorAll(".tok.on").forEach(function(x){ x.classList.remove("on"); }); b.classList.add("on");
+    gl.hidden = false;
+    gl.innerHTML = w ? ('<b class="ar" lang="ar">'+esc(arTxt(w[0]))+'</b> <span class="tl">'+esc(w[1])+'</span> — '+esc(w[2])) : '<span class="muted">Bu kelime sözlükte yok; cümlenin Türkçesine bak.</span>';
+    say(b.getAttribute("data-tok"), w ? w[1] : null);
+    return;
+  }
   if ((b = t.closest("[data-open]"))){ var v = b.getAttribute("data-open"); if (v[0]==="l") openLesson(v.slice(2)); else openStageExam(v.slice(2)); return; }
   if ((b = t.closest("[data-go]"))){ go(b.getAttribute("data-go")); return; }
   if ((b = t.closest("[data-step]"))){ cur.step = +b.getAttribute("data-step"); renderLesson(); return; }
@@ -3456,7 +4168,7 @@ document.addEventListener("keydown", function(e){
 });
 document.querySelector(".nav").addEventListener("click", function(e){ var b = e.target.closest("[data-go]"); if (b) go(b.getAttribute("data-go")); });
 $(".brand").addEventListener("click", function(){ go("home"); });
-window.addEventListener("hashchange", function(){ var h = location.hash.replace("#",""); if (h.indexOf("ders-")===0 && (!cur || cur.l.id !== h.slice(5))) route(); });
+window.addEventListener("hashchange", function(){ var h = location.hash.replace("#",""); if ((h.indexOf("ders-")===0 && (!cur || cur.l.id !== h.slice(5))) || (h.indexOf("hikaye-")===0 && (!ST || ST.s.id !== h.slice(7)))) route(); });
 
 window.__yalla = { quiz: function(){ return Q; } }; // test kancası
 // Bağımsız sitede Claude sohbeti yok: sekmeyi gizle.

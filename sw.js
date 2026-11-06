@@ -1,6 +1,6 @@
-// Yalla Şami çevrimdışı önbelleği (sürüm 202611061904)
-const CACHE = "yalla-sami-202611061904";
-const CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png"];
+// Yalla Şami çevrimdışı önbelleği (sürüm 202611061937)
+const CACHE = "yalla-sami-202611061937";
+const CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "img/h-a1-1-1.jpg"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
